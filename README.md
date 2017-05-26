@@ -4,7 +4,7 @@ A two-factor authentication package for Laravel 5.4
 ## Description
 This is a two-factor authentication package for *Laravel 5.4*. It is heavily inspired by the [Laravel Two-Factor Authentication](https://github.com/srmklive/laravel-twofactor-authentication) package. The main differences between this package and the aforementioned package are:
 
-- This package is tuned to work with the *MessageBird Verify* api instead of *Authy* out of the box. It is possible to implement your own custom two-factor authentication provider quite easily though.
+- This package currently only works with the *MessageBird Verify* api or the `"null"` driver that goes through all the steps of the two-factor authentication process without actually doing any real verification. This could be useful for testing purposes.
 - This package uses throttling to limit the number of unsuccessful authentication attempts in a certain amount of time.
 - This package is only guaranteed to work with Laravel 5.4. Prior version have not been tested.
 
@@ -48,7 +48,7 @@ class User extends Authenticatable
 Optionally, you might want to add `'mobile'` to your `$fillable` array.
 
 ## Changes to the Login Process
-Add the following trait to `LoginController`:
+1 Add the following trait to `LoginController`:
 ```
 ...
 use MichaelDzjap\TwoFactorAuth\Http\Controllers\InitiatesTwoFactorAuthProcess;
@@ -88,5 +88,26 @@ private function registerUserAndSendToken(User $user)
     // app(\MichaelDzjap\TwoFactorAuth\Contracts\TwoFactorProvider::class)->sendSMSToken($this->user)
     // Here we assume this function is called from a queue'd job called
     dispatch(new SendSMSToken($user));
+}
+```
+2 Add a `TwoFactorAuthController` in `app/Http/Controllers/Auth` with the following content:
+```
+<?php
+
+namespace App\Http\Controllers\Auth;
+
+use App\Http\Controllers\Controller;
+use MichaelDzjap\TwoFactorAuth\Http\Controllers\TwoFactorAuthenticatesUsers;
+
+class TwoFactorAuthController extends Controller
+{
+    use TwoFactorAuthenticatesUsers;
+
+    /**
+     * Where to redirect users after two-factor authentication passes.
+     *
+     * @var string
+     */
+    protected $redirectTo = '/home';
 }
 ```

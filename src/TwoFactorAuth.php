@@ -17,6 +17,15 @@ class TwoFactorAuth extends Model
     ];
 
     /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'id'
+    ];
+
+    /**
      * The primary key of the table.
      *
      * @var string

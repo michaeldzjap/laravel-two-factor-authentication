@@ -9,27 +9,33 @@ This is a two-factor authentication package for *Laravel 5.4*. It is heavily ins
 - This package is only guaranteed to work with Laravel 5.4. Prior version have not been tested.
 
 ## Installation
-To install using *Composer* run:
+1 To install using *Composer* run:
 ```
 composer require michaeldzjap/twofactor-auth
 ```
-Add the service provider to the `'providers'` array in `config/app.php`:
+If you want to use MessageBird Verify as the two-factor authentication provider (default) then you also need to install the [MessageBird PHP api](https://github.com/messagebird/php-rest-api):
+```
+composer require messagebird/php-rest-api
+```
+and don't forget to add your `MESSAGEBIRD_ACCESS_KEY` variable to the `.env`.
+
+2 Add the service provider to the `'providers'` array in `config/app.php`:
 ```
 MichaelDzjap\TwoFactorAuth\TwoFactorAuthServiceProvider::class
 ```
-Run the following *artisan* command to publish the configuration, language and view files:
+3 Run the following *artisan* command to publish the configuration, language and view files:
 ```
 php artisan vendor:publish
 ```
 If you only want to publish only one of these file groups, for instance if you don't need the views or language files, you can append one of the following commands to the *artisan* command: `--tag=config`, `--tag=lang` or `--tag-views`.
 
-Run the following *artisan* command to run the database migrations
+4 Run the following *artisan* command to run the database migrations
 ```
 php artisan migrate
 ```
 This will add a `mobile` column to the `users` table and create a `two_factor_auths` table.
 
-Add the following trait to your `User` model:
+5 Add the following trait to your `User` model:
 ```
 ...
 use MichaelDzjap\TwoFactorAuth\TwoFactorAuthenticable;

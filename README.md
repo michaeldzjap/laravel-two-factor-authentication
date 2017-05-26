@@ -48,6 +48,12 @@ class User extends Authenticatable
 Optionally, you might want to add `'mobile'` to your `$fillable` array.
 
 ## Changes to the Login Process
+The following two-factor authentication routes will be added automatically:
+```php
+$router->get('/auth/token', 'App\Http\Controllers\Auth\TwoFactorAuthController@showTwoFactorForm')->name('auth.token');
+$router->post('/auth/token', 'App\Http\Controllers\Auth\TwoFactorAuthController@verifyToken');
+```
+The first route is the route the user will be redirected to once the two-factor authentication process has been initiated. The second route is used to verify the two-factor authentication token that is to be entered by the user. The `showTwoFactorForm` controller method does exactly what it says. There do exist cases where you might want to respond differently however. For instance, instead of loading a view you might just want to return a `json` response. In that case you can simply overwrite `showTwoFactorForm` in the `TwoFactorAuthController` to be discussed below.
 1 Add the following trait to `LoginController`:
 ```php
 ...
@@ -91,6 +97,7 @@ private function registerUserAndSendToken(User $user)
 }
 ```
 The body of the second function can be left empty if you do not want to send a two-factor authentication token immediately after login. You might for instance want the user to instantiate this process from the form. In that case you would have to add the required route(s) and controller method(s) yourself. The best place for this would be the `TwoFactorAuthController` to be discussed next.
+
 2 Add a `TwoFactorAuthController` in `app/Http/Controllers/Auth` with the following content:
 ```php
 <?php

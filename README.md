@@ -31,7 +31,56 @@ This will add a `mobile` column to the `users` table and create a `two_factor_au
 
 Add the following trait to your `User` model:
 ```
-use MichaelDzjap\TwoFactorAuth\TwoFactorAuthenticable;
 ...
+use MichaelDzjap\TwoFactorAuth\TwoFactorAuthenticable;
 
+class User extends Authenticatable
+{
+    use Notifiable, TwoFactorAuthenticable;
+...
+```
+Optionally, you might want to add `'mobile'` to your `$fillable` array.
+
+## Changes to the Login Process
+Add the following trait to `LoginController`:
+```
+...
+use MichaelDzjap\TwoFactorAuth\Http\Controllers\InitiatesTwoFactorAuthProcess;
+
+class LoginController extends Controller
+{
+    use AuthenticatesUsers, InitiatesTwoFactorAuthProcess;
+...
+```
+and also add the following functions:
+```
+/**
+ * The user has been authenticated.
+ *
+ * @param  \Illuminate\Http\Request  $request
+ * @param  mixed  $user
+ * @return mixed
+ */
+protected function authenticated(Request $request, $user)
+{
+    self::shouldTwoFactorAuthenticate($request, $user);
+}
+```
+and
+```
+/**
+ * Provider specific two-factor authentication logic. In the case of MessageBird
+ * we just want to send an authentication token via SMS.
+ *
+ * @param  User $user
+ * @return mixed
+ */
+private function registerUserAndSendToken(User $user)
+{
+    // Custom, provider dependend logic for sending an authentication token 
+    // to the user. In the case of MessageBird Verify this could simply be
+    // app(\MichaelDzjap\TwoFactorAuth\Contracts\TwoFactorProvider::class)->sendSMSToken($this->user)
+    // Here we assume this function is called from a queue'd job called
+    dispatch(new SendSMSToken($user));
+}
 ```

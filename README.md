@@ -20,7 +20,7 @@ composer require messagebird/php-rest-api
 and don't forget to add your `MESSAGEBIRD_ACCESS_KEY` variable to the `.env`.
 
 2 Add the service provider to the `'providers'` array in `config/app.php`:
-```
+```php
 MichaelDzjap\TwoFactorAuth\TwoFactorAuthServiceProvider::class
 ```
 3 Run the following *artisan* command to publish the configuration, language and view files:
@@ -36,7 +36,7 @@ php artisan migrate
 This will add a `mobile` column to the `users` table and create a `two_factor_auths` table.
 
 5 Add the following trait to your `User` model:
-```
+```php
 ...
 use MichaelDzjap\TwoFactorAuth\TwoFactorAuthenticable;
 
@@ -49,7 +49,7 @@ Optionally, you might want to add `'mobile'` to your `$fillable` array.
 
 ## Changes to the Login Process
 1 Add the following trait to `LoginController`:
-```
+```php
 ...
 use MichaelDzjap\TwoFactorAuth\Http\Controllers\InitiatesTwoFactorAuthProcess;
 
@@ -59,7 +59,7 @@ class LoginController extends Controller
 ...
 ```
 and also add the following functions:
-```
+```php
 /**
  * The user has been authenticated.
  *
@@ -73,7 +73,7 @@ protected function authenticated(Request $request, $user)
 }
 ```
 and
-```
+```php
 /**
  * Provider specific two-factor authentication logic. In the case of MessageBird
  * we just want to send an authentication token via SMS.
@@ -90,8 +90,9 @@ private function registerUserAndSendToken(User $user)
     dispatch(new SendSMSToken($user));
 }
 ```
+The body of the second function can be left empty if you do not want to send a two-factor authentication token immediately after login. You might for instance want the user to instantiate this process from the form. In that case you would have to add the required route(s) and controller method(s) yourself. The best place for this would be the `TwoFactorAuthController` to be discussed next.
 2 Add a `TwoFactorAuthController` in `app/Http/Controllers/Auth` with the following content:
-```
+```php
 <?php
 
 namespace App\Http\Controllers\Auth;

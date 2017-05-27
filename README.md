@@ -120,7 +120,7 @@ private function registerUserAndSendToken(User $user)
 {
     // Custom, provider dependend logic for sending an authentication token 
     // to the user. In the case of MessageBird Verify this could simply be
-    // app(\MichaelDzjap\TwoFactorAuth\Contracts\TwoFactorProvider::class)->sendSMSToken($this->user)
+    // resolve(TwoFactorProvider::class)->sendSMSToken($this->user)
     // Here we assume this function is called from a queue'd job
     dispatch(new SendSMSToken($user));
 }

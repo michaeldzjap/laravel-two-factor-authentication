@@ -50,19 +50,23 @@ Optionally, you might want to add `'mobile'` to your `$fillable` array.
 ## Changes to the Login Process
 The following two-factor authentication routes will be added automatically:
 ```php
-$router->get('/auth/token', 'App\Http\Controllers\Auth\TwoFactorAuthController@showTwoFactorForm')->name('auth.token');
-$router->post('/auth/token', 'App\Http\Controllers\Auth\TwoFactorAuthController@verifyToken');
+$router->group([
+    'middleware' => ['web', 'guest'],
+    'namespace' => 'App\Http\Controllers\Auth',
+], function () use ($router) {
+    $router->get('/auth/token', 'TwoFactorAuthController@showTwoFactorForm')->name('auth.token');
+    $router->post('/auth/token', 'TwoFactorAuthController@verifyToken');
+});
 ```
 The first route is the route the user will be redirected to once the two-factor authentication process has been initiated. The second route is used to verify the two-factor authentication token that is to be entered by the user. The `showTwoFactorForm` controller method does exactly what it says. There do exist cases where you might want to respond differently however. For instance, instead of loading a view you might just want to return a `json` response. In that case you can simply overwrite `showTwoFactorForm` in the `TwoFactorAuthController` to be discussed below.
 
-1 Add the following trait to `LoginController`:
+1 Add the following import to `LoginController`:
 ```php
 ...
-use MichaelDzjap\TwoFactorAuth\Http\Controllers\InitiatesTwoFactorAuthProcess;
+use MichaelDzjap\TwoFactorAuth\Contracts\TwoFactorProvider;
 
 class LoginController extends Controller
 {
-    use AuthenticatesUsers, InitiatesTwoFactorAuthProcess;
 ...
 ```
 and also add the following functions:
@@ -76,10 +80,34 @@ and also add the following functions:
  */
 protected function authenticated(Request $request, $user)
 {
-    self::shouldTwoFactorAuthenticate($request, $user);
+    if (resolve(TwoFactorProvider::class)->enabled($user)) {
+        return self::startTwoFactorAuthProcess($request, $user);
+    }
+
+    return redirect()->intended($this->redirectPath());
 }
 ```
 and
+```php
+/**
+ * Log out the user and start the two factor authentication state.
+ *
+ * @param  Request $request
+ * @param  User $user
+ * @return \Illuminate\Http\Response
+ */
+private function startTwoFactorAuthProcess(Request $request, $user)
+{
+    // Logout user, but remember user id
+    auth()->logout();
+    $request->session()->put('two-factor:auth:id', $user->id);
+
+    self::registerUserAndSendToken($user);
+
+    return redirect()->route('auth.token');
+}
+```
+and lastly
 ```php
 /**
  * Provider specific two-factor authentication logic. In the case of MessageBird
@@ -97,7 +125,7 @@ private function registerUserAndSendToken(User $user)
     dispatch(new SendSMSToken($user));
 }
 ```
-The body of the second function can be left empty if you do not want to send a two-factor authentication token automatically after a successful login attempt. Instead, you might want the user to instantiate this process from the form him/herself. In that case you would have to add the required route(s) and controller method(s) yourself. The best place for this would be the `TwoFactorAuthController` to be discussed next.
+You can discard the third function if you do not want to send a two-factor authentication token automatically after a successful login attempt. Instead, you might want the user to instantiate this process from the form him/herself. In that case you would have to add the required route and controller method to trigger this function yourself. The best place for this would be the `TwoFactorAuthController` to be discussed next.
 
 2 Add a `TwoFactorAuthController` in `app/Http/Controllers/Auth` with the following content:
 ```php

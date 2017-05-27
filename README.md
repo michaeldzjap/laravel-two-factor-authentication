@@ -6,7 +6,7 @@ This is a two-factor authentication package for *Laravel 5.4*. It is heavily ins
 
 - This package currently only works with the *MessageBird Verify* api or the `"null"` driver that goes through all the steps of the two-factor authentication process without actually doing any real verification. This could be useful for testing purposes.
 - This package uses throttling to limit the number of unsuccessful authentication attempts in a certain amount of time.
-- This package is only guaranteed to work with Laravel 5.4. Prior version have not been tested.
+- This package is only guaranteed to work with Laravel 5.4. Prior versions have not been tested.
 
 ## Installation
 1 To install using *Composer* run:
@@ -27,7 +27,7 @@ MichaelDzjap\TwoFactorAuth\TwoFactorAuthServiceProvider::class
 ```
 php artisan vendor:publish
 ```
-If you only want to publish only one of these file groups, for instance if you don't need the views or language files, you can append one of the following commands to the *artisan* command: `--tag=config`, `--tag=lang` or `--tag-views`.
+If you want to publish only one of these file groups, for instance if you don't need the views or language files, you can append one of the following commands to the *artisan* command: `--tag=config`, `--tag=lang` or `--tag-views`.
 
 4 Run the following *artisan* command to run the database migrations
 ```

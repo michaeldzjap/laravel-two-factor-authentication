@@ -18,7 +18,7 @@ return [
     'send' => 'Verstuur Token',
 
     'failed' => 'Ongeldige authenticatie token aangeleverd.',
-    'throttle' => 'Te veel authenticatie pogingen. Je wordt automatisch teruggestuurd naar de login pagina. Probeer het alsjeblieft opnieuw over :seconds seconden.',
-    'expired' => 'De authenticatie token is verlopen. Je wordt automatisch teruggestuurd naar de login pagina.',
+    'throttle' => 'Te veel authenticatie token pogingen. Probeer het alsjeblieft opnieuw over :seconds seconden.',
+    'expired' => 'De authenticatie token is verlopen.',
 
 ];

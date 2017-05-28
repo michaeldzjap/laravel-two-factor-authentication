@@ -4,10 +4,14 @@ namespace MichaelDzjap\TwoFactorAuth\Http\Controllers;
 
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Cache\RateLimiter;
+use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 trait ThrottlesTwoFactorAuths
 {
+    use ThrottlesLogins;
+
     /**
      * Determine if the user has too many failed two-factor authentiction attempts.
      *
@@ -16,9 +20,7 @@ trait ThrottlesTwoFactorAuths
      */
     protected function hasTooManyTwoFactorAuthAttempts(Request $request)
     {
-        return $this->limiter()->tooManyAttempts(
-            $this->throttleKey($request), 3, 1
-        );
+        return self::hasTooManyLoginAttempts($request);
     }
 
     /**
@@ -29,7 +31,7 @@ trait ThrottlesTwoFactorAuths
      */
     protected function incrementTwoFactorAuthAttempts(Request $request)
     {
-        $this->limiter()->hit($this->throttleKey($request));
+        self::incrementLoginAttempts($request);
     }
 
     /**
@@ -44,15 +46,19 @@ trait ThrottlesTwoFactorAuths
             $this->throttleKey($request)
         );
 
-        $message = __('two-factor-auth.throttle', ['seconds' => $seconds]);
+        $message = __('twofactor-auth::twofactor-auth.throttle', ['seconds' => $seconds]);
 
-        $errors = [$this->fieldname() => $message];
+        $errors = [$this->username() => $message];
 
         if ($request->expectsJson()) {
             return response()->json($errors, 423);
         }
 
-        return redirect()->back()->withErrors($errors);
+        return redirect()->to('/login')
+            ->withInput(
+                array_only($request->session()->get('two-factor:auth'), [$this->username(), 'remember'])
+            )
+            ->withErrors($errors);
     }
 
     /**
@@ -85,7 +91,7 @@ trait ThrottlesTwoFactorAuths
      */
     protected function throttleKey(Request $request)
     {
-        return $request->session()->get('two-factor:auth:id').'|'.$request->ip();
+        return Str::lower($request->session()->get('two-factor:auth')[$this->username()]).'|'.$request->ip();
     }
 
     /**

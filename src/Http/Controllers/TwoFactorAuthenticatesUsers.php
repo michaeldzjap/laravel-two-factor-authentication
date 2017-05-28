@@ -33,10 +33,10 @@ trait TwoFactorAuthenticatesUsers
      */
     public function verifyToken(VerifySMSToken $request)
     {
-        // If the class is using the ThrottlesLogins trait, we can automatically throttle
-        // the two-factor authentication attempts for this application. We'll key this by
-        // the user id in the session storage and the IP address of the client making
-        // these requests into this application.
+        // If the class is using the ThrottlesTwoFactorAuths trait, we can automatically
+        // throttle the two-factor authentication attempts for this application.
+        // We'll key this by the username in the session storage and the IP address
+        // of the client making these requests into this application.
         if ($this->hasTooManyTwoFactorAuthAttempts($request)) {
             $this->fireLockoutEvent($request);
 
@@ -77,7 +77,6 @@ trait TwoFactorAuthenticatesUsers
         $user = User::findOrFail($request->session()->get('two-factor:auth:id'));
 
         if (resolve(TwoFactorProvider::class)->verify($user, $request->input('token'))) {
-            $request->session()->forget('two-factor:auth:id');
             auth()->login($user);   // If SMS code validation passes, login user
 
             return true;
@@ -98,6 +97,8 @@ trait TwoFactorAuthenticatesUsers
 
         $this->clearTwoFactorAuthAttempts($request);
 
+        $request->session()->forget('two-factor:auth');
+
         return redirect()->intended($this->redirectPath());
     }
 
@@ -109,7 +110,7 @@ trait TwoFactorAuthenticatesUsers
      */
     protected function sendFailedTwoFactorAuthResponse(Request $request)
     {
-        $errors = [$this->fieldname() => __('two-factor-auth.failed')];
+        $errors = ['token' => __('twofactor-auth::twofactor-auth.failed')];
 
         if ($request->expectsJson()) {
             return response()->json($errors, 422);
@@ -127,22 +128,22 @@ trait TwoFactorAuthenticatesUsers
      */
     protected function sendKillTwoFactorAuthResponse(Request $request)
     {
-        $errors = [$this->fieldname() => __('two-factor-auth.expired')];
+        $errors = [$this->username() => __('twofactor-auth::twofactor-auth.expired')];
 
         if ($request->expectsJson()) {
             return response()->json($errors, 401);
         }
 
-        return redirect()->back()->withErrors($errors);
+        return redirect()->to('/login')->withErrors($errors);
     }
 
     /**
-     * Get the input field identifier to be used by the controller.
+     * Get the login username to be used by the controller.
      *
      * @return string
      */
-    public function fieldname()
+    public function username()
     {
-        return 'token';
+        return 'email';
     }
 }

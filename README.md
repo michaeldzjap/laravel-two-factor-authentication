@@ -100,7 +100,9 @@ private function startTwoFactorAuthProcess(Request $request, $user)
 {
     // Logout user, but remember user id
     auth()->logout();
-    $request->session()->put('two-factor:auth:id', $user->id);
+    $request->session()->put(
+        'two-factor:auth', array_merge(['id' => $user->id], $request->only('email', 'remember'))
+    );
 
     self::registerUserAndSendToken($user);
 

@@ -13,7 +13,7 @@ class VerifySMSToken extends FormRequest
      */
     public function authorize()
     {
-        if ($this->session()->has('two-factor:auth:id')) {
+        if ($this->session()->has('two-factor:auth')) {
             return true;
         }
 

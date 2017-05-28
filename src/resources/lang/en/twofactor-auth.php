@@ -18,7 +18,7 @@ return [
     'send' => 'Send Token',
 
     'failed' => 'Invalid authentication token provided.',
-    'throttle' => 'Too many authentication attempts. You will be redirected to the login page. Please try again in :seconds seconds.',
-    'expired' => 'The authentication token has expired. You will be redirected to the login page.',
+    'throttle' => 'Too many two-factor authentication token attempts. Please try again in :seconds seconds.',
+    'expired' => 'The two-factor authentication token has expired.',
 
 ];

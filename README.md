@@ -156,6 +156,24 @@ class TwoFactorAuthController extends Controller
     protected $redirectTo = '/home';
 }
 ```
+3 If you want to give textual feedback to the user when two-factor authentication fails due to an expired token or when throttling kicks in you may want to add this to `resources/views/auth/login.blade.php`:
+```php
+...
+<form class="form-horizontal" role="form" method="POST" action="{{ route('login') }}">
+    {{ csrf_field() }}
+
+    {{-- Add this block to show an error message in case of an expired token or user lockout --}}
+    @if ($errors->has('token'))
+        <div class="form-group has-error">
+            <div class="col-xs-12">
+                <span class="help-block">
+                    <strong>{{ $errors->first('token') }}</strong>
+                </span>
+            </div>
+        </div>
+    @endif
+...
+```
 
 ## Errors and Exceptions
 Unfortunately the *MessageBird* php api throws rather generic exceptions when the verification of a token fails. The only way to distinguish an expired token from an invalid token is by comparing their error messages, which obviously is not a very robust mechanism. The reason this is rather unfortunate is because in the case of an invalid token we want to give the user at least a few (3) changes to re-enter the token before throttling kicks in, whereas in the case of an expired token we just want to redirect to the login screen right away.

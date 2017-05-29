@@ -48,7 +48,7 @@ trait ThrottlesTwoFactorAuths
 
         $message = __('twofactor-auth::twofactor-auth.throttle', ['seconds' => $seconds]);
 
-        $errors = [$this->username() => $message];
+        $errors = ['token' => $message];
 
         if ($request->expectsJson()) {
             return response()->json($errors, 423);

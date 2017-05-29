@@ -128,7 +128,7 @@ trait TwoFactorAuthenticatesUsers
      */
     protected function sendKillTwoFactorAuthResponse(Request $request)
     {
-        $errors = [$this->username() => __('twofactor-auth::twofactor-auth.expired')];
+        $errors = ['token' => __('twofactor-auth::twofactor-auth.expired')];
 
         if ($request->expectsJson()) {
             return response()->json($errors, 401);

@@ -47,6 +47,12 @@ class User extends Authenticatable
 ```
 Optionally, you might want to add `'mobile'` to your `$fillable` array.
 
+6 Add the following `.env` var:
+```
+TWO_FACTOR_AUTH_DRIVER=messagebird
+```
+Here it is assumed you want to use the MessageBird driver.
+
 ## Changes to the Login Process
 The following two-factor authentication routes will be added automatically:
 ```php

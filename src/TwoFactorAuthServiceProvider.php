@@ -32,7 +32,7 @@ class TwoFactorAuthServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/config/twofactor-auth.php' => config_path('twofactor-auth.php'),
-        ]);
+        ], 'config');
 
         $this->publishes([
             __DIR__.'/resources/lang' => resource_path('lang/vendor/twofactor-auth'),

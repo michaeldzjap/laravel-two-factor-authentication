@@ -13,11 +13,11 @@ This is a two-factor authentication package for *Laravel 5.4*. It is heavily ins
 ```
 composer require michaeldzjap/twofactor-auth
 ```
-If you want to use MessageBird Verify as the two-factor authentication provider (default) then you also need to install the [MessageBird PHP api](https://github.com/messagebird/php-rest-api):
+If you want to use MessageBird Verify as the two-factor authentication provider then you also need to install the [MessageBird PHP api](https://github.com/messagebird/php-rest-api):
 ```
 composer require messagebird/php-rest-api
 ```
-and don't forget to add your `MESSAGEBIRD_ACCESS_KEY` variable to the `.env`.
+and don't forget to add your `MESSAGEBIRD_ACCESS_KEY` and `TWO_FACTOR_AUTH_DRIVER=messagebird` variables to the `.env`. If you instead wish to use the `'null'` driver (default) then do **NOT** define the `TWO_FACTOR_AUTH_DRIVER` variable in your `.env`.
 
 2 Add the service provider to the `'providers'` array in `config/app.php`:
 ```php
@@ -46,12 +46,6 @@ class User extends Authenticatable
 ...
 ```
 Optionally, you might want to add `'mobile'` to your `$fillable` array.
-
-6 Add the following `.env` var:
-```
-TWO_FACTOR_AUTH_DRIVER=messagebird
-```
-Here it is assumed you want to use the MessageBird driver.
 
 ## Changes to the Login Process
 The following two-factor authentication routes will be added automatically:

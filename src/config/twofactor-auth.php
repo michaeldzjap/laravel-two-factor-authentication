@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'default' => env('TWO_FACTOR_AUTH_DRIVER', 'messagebird'),
+    'default' => env('TWO_FACTOR_AUTH_DRIVER', 'null'),
 
     /*
     |--------------------------------------------------------------------------

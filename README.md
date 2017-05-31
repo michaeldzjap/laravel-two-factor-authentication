@@ -4,7 +4,7 @@ A two-factor authentication package for Laravel 5.4
 ## Description
 This is a two-factor authentication package for *Laravel 5.4*. It is heavily inspired by the [Laravel Two-Factor Authentication](https://github.com/srmklive/laravel-twofactor-authentication) package. The main differences between this package and the aforementioned package are:
 
-- This package currently only works with the *MessageBird Verify* api or the `"null"` driver that goes through all the steps of the two-factor authentication process without actually doing any real verification. This could be useful for testing purposes.
+- This package currently only works with the *MessageBird Verify* api or the `'null'` driver that goes through all the steps of the two-factor authentication process without actually doing any real verification. This could be useful for testing purposes.
 - This package uses throttling to limit the number of unsuccessful authentication attempts in a certain amount of time.
 - This package is only guaranteed to work with Laravel 5.4. Prior versions have not been tested.
 

@@ -126,9 +126,6 @@ class TwoFactorAuthManager
      */
     protected function getConfig($name)
     {
-        if (!$name) {
-            $name = 'null';
-        }
         return $this->app['config']["twofactor-auth.providers.{$name}"];
     }
 

@@ -5,6 +5,7 @@ namespace MichaelDzjap\TwoFactorAuth\Http\Controllers;
 use App\User;
 use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use MichaelDzjap\TwoFactorAuth\Contracts\TwoFactorProvider;
 use MichaelDzjap\TwoFactorAuth\Exceptions\TokenAlreadyProcessedException;
 use MichaelDzjap\TwoFactorAuth\Exceptions\TokenExpiredException;
@@ -103,20 +104,18 @@ trait TwoFactorAuthenticatesUsers
     }
 
     /**
-     * Get the failed two-factor authentication response instance.
+     * Throw a validation exception when two-factor authentication attempt fails.
+     * NOTE: Throwing a validation exception is cleaner than redirecting, but
+     * we can only do it here because we don't need to redirect to the login route.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
     protected function sendFailedTwoFactorAuthResponse(Request $request)
     {
-        $errors = ['token' => __('twofactor-auth::twofactor-auth.failed')];
-
-        if ($request->expectsJson()) {
-            return response()->json($errors, 422);
-        }
-
-        return redirect()->back()->withErrors($errors);
+        throw ValidationException::withMessages([
+            'token' => [__('twofactor-auth::twofactor-auth.failed')],
+        ]);
     }
 
     /**

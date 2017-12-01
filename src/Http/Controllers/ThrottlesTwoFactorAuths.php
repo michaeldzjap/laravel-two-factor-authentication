@@ -2,8 +2,6 @@
 
 namespace MichaelDzjap\TwoFactorAuth\Http\Controllers;
 
-use Illuminate\Auth\Events\Lockout;
-use Illuminate\Cache\RateLimiter;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -69,18 +67,7 @@ trait ThrottlesTwoFactorAuths
      */
     protected function clearTwoFactorAuthAttempts(Request $request)
     {
-        $this->limiter()->clear($this->throttleKey($request));
-    }
-
-    /**
-     * Fire an event when a lockout occurs.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return void
-     */
-    protected function fireLockoutEvent(Request $request)
-    {
-        event(new Lockout($request));
+        self::clearLoginAttempts($request);
     }
 
     /**
@@ -92,15 +79,5 @@ trait ThrottlesTwoFactorAuths
     protected function throttleKey(Request $request)
     {
         return Str::lower($request->session()->get('two-factor:auth')[$this->username()]).'|'.$request->ip();
-    }
-
-    /**
-     * Get the rate limiter instance.
-     *
-     * @return \Illuminate\Cache\RateLimiter
-     */
-    protected function limiter()
-    {
-        return app(RateLimiter::class);
     }
 }

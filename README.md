@@ -1,12 +1,12 @@
 # Two-Factor-Authentication
-A two-factor authentication package for Laravel >= 5.4
+A two-factor authentication package for Laravel >= 5.5
 
 ## Description
 This is a two-factor authentication package for *Laravel*. It is heavily inspired by the [Laravel Two-Factor Authentication](https://github.com/srmklive/laravel-twofactor-authentication) package. The main differences between this package and the aforementioned package are:
 
 - This package currently only works with the *MessageBird Verify* api or the `'null'` driver that goes through all the steps of the two-factor authentication process without actually doing any real verification. This could be useful for testing purposes.
 - This package uses throttling to limit the number of unsuccessful authentication attempts in a certain amount of time.
-- This package is only guaranteed to work with Laravel >= 5.4. Prior versions have not been tested.
+- The current version of this package is only guaranteed to work with Laravel >= 5.5. Version 1.* of this package works with Laravel 5.4. Versions of Laravel prior to 5.4 have not been tested.
 
 ## Installation
 1 To install using *Composer* run:
@@ -120,7 +120,7 @@ and lastly
  */
 private function registerUserAndSendToken(User $user)
 {
-    // Custom, provider dependend logic for sending an authentication token 
+    // Custom, provider dependend logic for sending an authentication token
     // to the user. In the case of MessageBird Verify this could simply be
     // resolve(TwoFactorProvider::class)->sendSMSToken($this->user)
     // Here we assume this function is called from a queue'd job
@@ -141,6 +141,20 @@ use MichaelDzjap\TwoFactorAuth\Http\Controllers\TwoFactorAuthenticatesUsers;
 class TwoFactorAuthController extends Controller
 {
     use TwoFactorAuthenticatesUsers;
+
+    /**
+     * The maximum number of attempts to allow.
+     *
+     * @var int
+     */
+    protected $maxAttempts = 5;
+
+    /**
+     * The number of minutes to throttle for.
+     *
+     * @var int
+     */
+    protected $decayMinutes = 1;
 
     /**
      * Where to redirect users after two-factor authentication passes.

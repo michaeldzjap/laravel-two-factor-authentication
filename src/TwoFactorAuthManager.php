@@ -2,38 +2,14 @@
 
 namespace MichaelDzjap\TwoFactorAuth;
 
+use Illuminate\Support\Manager;
 use InvalidArgumentException;
 use MessageBird\Client;
 use MichaelDzjap\TwoFactorAuth\Providers\MessageBirdVerify;
 use MichaelDzjap\TwoFactorAuth\Providers\NullProvider;
 
-class TwoFactorAuthManager
+class TwoFactorAuthManager extends Manager
 {
-    /**
-     * The application instance.
-     *
-     * @var \Illuminate\Foundation\Application
-     */
-    protected $app;
-
-    /**
-     * The array of resolved two-factor authentication drivers.
-     *
-     * @var array
-     */
-    protected $drivers = [];
-
-    /**
-     * Create a new manager instance.
-     *
-     * @param  \Illuminate\Foundation\Application  $app
-     * @return void
-     */
-    public function __construct($app)
-    {
-        $this->app = $app;
-    }
-
     /**
      * Get a driver instance.
      *
@@ -46,87 +22,25 @@ class TwoFactorAuthManager
     }
 
     /**
-     * Get a driver instance.
-     *
-     * @param  string  $name
-     * @return mixed
-     */
-    public function driver($name = null)
-    {
-        $name = $name ?: $this->getDefaultDriver();
-
-        return $this->drivers[$name] = $this->get($name);
-    }
-
-    /**
-     * Attempt to get the connection from the local cache.
-     *
-     * @param  string  $name
-     * @return \MichaelDzjap\TwoFactorAuth\Contracts\TwoFactorProvider
-     */
-    protected function get($name)
-    {
-        return $this->drivers[$name] ?? $this->resolve($name);
-    }
-
-    /**
-     * Resolve the given store.
-     *
-     * @param  string  $name
-     * @return \MichaelDzjap\TwoFactorAuth\Contracts\TwoFactorProvider
-     *
-     * @throws \InvalidArgumentException
-     */
-    protected function resolve($name)
-    {
-        $config = $this->getConfig($name);
-
-        if (is_null($config)) {
-            throw new InvalidArgumentException("TwoFactorProvider [{$name}] is not defined.");
-        }
-
-        $driverMethod = 'create'.ucfirst($config['driver']).'Driver';
-
-        if (! method_exists($this, $driverMethod)) {
-            throw new InvalidArgumentException("Driver [{$config['driver']}] is not supported.");
-        }
-
-        return $this->{$driverMethod}($config);
-    }
-
-    /**
      * Create an instance of the driver.
      *
-     * @param  array  $config
      * @return \MichaelDzjap\TwoFactorAuth\Contracts\TwoFactorProvider
      */
-    protected function createMessageBirdDriver(array $config)
+    protected function createMessageBirdDriver()
     {
         return new MessageBirdVerify(
-            new Client($config['key'])
+            new Client($this->app['config']["twofactor-auth.providers.messagebird.key"])
         );
     }
 
     /**
      * Create an instance of the driver.
      *
-     * @param  array  $config
      * @return \MichaelDzjap\TwoFactorAuth\Contracts\TwoFactorProvider
      */
-    protected function createNullDriver(array $config)
+    protected function createNullDriver()
     {
         return new NullProvider;
-    }
-
-    /**
-     * Get the provider configuration.
-     *
-     * @param  string  $name
-     * @return array
-     */
-    protected function getConfig($name)
-    {
-        return $this->app['config']["twofactor-auth.providers.{$name}"];
     }
 
     /**

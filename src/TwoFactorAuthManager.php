@@ -3,7 +3,6 @@
 namespace MichaelDzjap\TwoFactorAuth;
 
 use Illuminate\Support\Manager;
-use InvalidArgumentException;
 use MessageBird\Client;
 use MichaelDzjap\TwoFactorAuth\Providers\MessageBirdVerify;
 use MichaelDzjap\TwoFactorAuth\Providers\NullProvider;

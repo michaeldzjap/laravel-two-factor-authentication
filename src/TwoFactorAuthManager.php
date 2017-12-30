@@ -28,7 +28,7 @@ class TwoFactorAuthManager extends Manager
     protected function createMessageBirdDriver()
     {
         return new MessageBirdVerify(
-            new Client($this->app['config']["twofactor-auth.providers.messagebird.key"])
+            new Client($this->app['config']['twofactor-auth.providers.messagebird.key'])
         );
     }
 

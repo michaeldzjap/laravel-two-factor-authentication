@@ -9,7 +9,7 @@ This is a two-factor authentication package for *Laravel*. It is heavily inspire
 - The current version of this package is only guaranteed to work with Laravel >= 5.5. Version 1.* of this package works with Laravel 5.4. Versions of Laravel prior to 5.4 have not been tested.
 
 ## Installation
-1 To install using *Composer* run:
+1. To install using *Composer* run:
 ```
 composer require michaeldzjap/twofactor-auth
 ```
@@ -19,23 +19,23 @@ composer require messagebird/php-rest-api
 ```
 and don't forget to add your `MESSAGEBIRD_ACCESS_KEY` and `TWO_FACTOR_AUTH_DRIVER=messagebird` variables to the `.env`. If you instead wish to use the `'null'` driver (default) then do **NOT** define the `TWO_FACTOR_AUTH_DRIVER` variable in your `.env`.
 
-2 Add the service provider to the `'providers'` array in `config/app.php`:
+2. Add the service provider to the `'providers'` array in `config/app.php`:
 ```php
 MichaelDzjap\TwoFactorAuth\TwoFactorAuthServiceProvider::class
 ```
-3 Run the following *artisan* command to publish the configuration, language and view files:
+3. Run the following *artisan* command to publish the configuration, language and view files:
 ```
 php artisan vendor:publish
 ```
 If you want to publish only one of these file groups, for instance if you don't need the views or language files, you can append one of the following commands to the *artisan* command: `--tag=config`, `--tag=lang` or `--tag-views`.
 
-4 Run the following *artisan* command to run the database migrations
+4. Run the following *artisan* command to run the database migrations
 ```
 php artisan migrate
 ```
 This will add a `mobile` column to the `users` table and create a `two_factor_auths` table.
 
-5 Add the following trait to your `User` model:
+5. Add the following trait to your `User` model:
 ```php
 ...
 use MichaelDzjap\TwoFactorAuth\TwoFactorAuthenticable;
@@ -60,7 +60,7 @@ $router->group([
 ```
 The first route is the route the user will be redirected to once the two-factor authentication process has been initiated. The second route is used to verify the two-factor authentication token that is to be entered by the user. The `showTwoFactorForm` controller method does exactly what it says. There do exist cases where you might want to respond differently however. For instance, instead of loading a view you might just want to return a `json` response. In that case you can simply overwrite `showTwoFactorForm` in the `TwoFactorAuthController` to be discussed below.
 
-1 Add the following import to `LoginController`:
+1. Add the following import to `LoginController`:
 ```php
 ...
 use MichaelDzjap\TwoFactorAuth\Contracts\TwoFactorProvider;
@@ -129,7 +129,7 @@ private function registerUserAndSendToken(User $user)
 ```
 You can discard the third function if you do not want to send a two-factor authentication token automatically after a successful login attempt. Instead, you might want the user to instantiate this process from the form him/herself. In that case you would have to add the required route and controller method to trigger this function yourself. The best place for this would be the `TwoFactorAuthController` to be discussed next.
 
-2 Add a `TwoFactorAuthController` in `app/Http/Controllers/Auth` with the following content:
+2. Add a `TwoFactorAuthController` in `app/Http/Controllers/Auth` with the following content:
 ```php
 <?php
 
@@ -164,7 +164,7 @@ class TwoFactorAuthController extends Controller
     protected $redirectTo = '/home';
 }
 ```
-3 If you want to give textual feedback to the user when two-factor authentication fails due to an expired token or when throttling kicks in you may want to add this to `resources/views/auth/login.blade.php`:
+3. If you want to give textual feedback to the user when two-factor authentication fails due to an expired token or when throttling kicks in you may want to add this to `resources/views/auth/login.blade.php`:
 ```php
 ...
 <form class="form-horizontal" role="form" method="POST" action="{{ route('login') }}">
@@ -181,6 +181,28 @@ class TwoFactorAuthController extends Controller
         </div>
     @endif
 ...
+```
+
+## Using a Custom Provider
+Since the v2.1.0 release it is possible to user your own custom provider. To do so your provider needs to implement `MichaelDzjap\TwoFactorAuth\Contracts\TwoFactorProvider` (and possibly `MichaelDzjap\TwoFactorAuth\Contracts\SMSToken` if you want to send the authentication token via SMS).
+
+1. Assuming the name of your custom provider is 'dummy', you should register it with `TwoFactorAuthManager` from a service provider (could be `\App\Providers\AppServiceProvider`):
+```php
+resolve(\MichaelDzjap\TwoFactorAuth\TwoFactorAuthManager)->extend('dummy', function ($app) {
+    return new DummyProvider;
+});
+```
+2. Add an entry for you custom provider in the 'provider' array in *app/config/twofactor-auth.php*:
+```php
+...
+'dummy' => [
+    'driver' => 'dummy',
+],
+...
+```
+3. Lastly, don't forget to change the name of the provider in your *.env*:
+```
+TWO_FACTOR_AUTH_DRIVER=dummy
 ```
 
 ## Errors and Exceptions

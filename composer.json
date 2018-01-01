@@ -7,7 +7,7 @@
     "type": "package",
     "minimum-stability": "dev",
     "require": {
-        "illuminate/support": "~5.5"
+        "illuminate/support": "5.5.*"
     },
     "extra": {
         "laravel": {

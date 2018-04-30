@@ -49,7 +49,7 @@ trait ThrottlesTwoFactorAuths
         $errors = ['token' => $message];
 
         if ($request->expectsJson()) {
-            return response()->json($errors, 423);
+            return response()->json($errors, 429);
         }
 
         return redirect()->to('/login')

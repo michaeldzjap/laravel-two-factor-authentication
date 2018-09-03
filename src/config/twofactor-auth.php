@@ -44,6 +44,24 @@ return [
             'driver' => 'null',
         ],
 
-    ]
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Routes Configuration + Naming
+    |--------------------------------------------------------------------------
+    |
+    | Here you may customize the route URL's and in case of the GET route, also
+    | the route name.
+    |
+    */
+
+    'routes' => [
+        'get' => [
+            'url' => '/auth/token',
+            'name' => 'auth.token',
+        ],
+        'post' => '/auth/token',
+    ],
 
 ];

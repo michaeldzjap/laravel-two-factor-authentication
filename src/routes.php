@@ -6,6 +6,9 @@ $router->group([
     'middleware' => ['web', 'guest'],
     'namespace' => 'App\Http\Controllers\Auth',
 ], function () use ($router) {
-    $router->get('/auth/token', 'TwoFactorAuthController@showTwoFactorForm')->name('auth.token');
-    $router->post('/auth/token', 'TwoFactorAuthController@verifyToken');
+    $router->get(
+        config('twofactor-auth.routes.get.url'),
+        'TwoFactorAuthController@showTwoFactorForm'
+    )->name(config('twofactor-auth.routes.get.name'));
+    $router->post(config('twofactor-auth.routes.post'), 'TwoFactorAuthController@verifyToken');
 });

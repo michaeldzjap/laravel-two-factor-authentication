@@ -13,7 +13,7 @@ use MichaelDzjap\TwoFactorAuth\Exceptions\TokenAlreadyProcessedException;
 use MichaelDzjap\TwoFactorAuth\Exceptions\TokenExpiredException;
 use MichaelDzjap\TwoFactorAuth\Exceptions\TokenInvalidException;
 
-class MessageBirdVerify implements TwoFactorProvider, SMSToken
+class MessageBirdVerify extends BaseProvider implements TwoFactorProvider, SMSToken
 {
     /**
      * MessageBird client instance.
@@ -31,17 +31,6 @@ class MessageBirdVerify implements TwoFactorProvider, SMSToken
     public function __construct(Client $client)
     {
         $this->client = $client;
-    }
-
-    /**
-     * Check if two-factor authentication is enabled for a user.
-     *
-     * @param  User $user
-     * @return bool
-     */
-    public function enabled(User $user)
-    {
-        return $user->twoFactorAuth;
     }
 
     /**

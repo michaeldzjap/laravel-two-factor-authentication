@@ -2,30 +2,31 @@
 
 @section('content')
 <div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">@lang('twofactor-auth::twofactor-auth.title')</div>
-                <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ route('auth.token') }}">
-                        {{ csrf_field() }}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">@lang('twofactor-auth::twofactor-auth.title')</div>
 
-                        <div class="form-group{{ $errors->has('token') ? ' has-error' : '' }}">
-                            <label for="token" class="col-md-4 control-label">@lang('twofactor-auth::twofactor-auth.label')</label>
+                <div class="card-body">
+                    <form class="form-horizontal" role="form" method="POST" action="{{ route('auth.token') }}">
+                        @csrf
+
+                        <div class="form-group row">
+                            <label for="token" class="col-md-4 col-form-label text-md-right">@lang('twofactor-auth::twofactor-auth.label')</label>
 
                             <div class="col-md-6">
-                                <input id="token" type="text" class="form-control" name="token" value="{{ old('token') }}" required autofocus>
+                                <input id="token" type="text" class="form-control{{ $errors->has('token') ? ' is-invalid' : '' }}" name="token" value="{{ old('token') }}" required autofocus>
 
                                 @if ($errors->has('token'))
-                                    <span class="help-block">
+                                    <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('token') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <div class="col-md-8 col-md-offset-4">
+                        <div class="form-group row mb-0">
+                            <div class="col-md-8 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
                                     @lang('twofactor-auth::twofactor-auth.send')
                                 </button>

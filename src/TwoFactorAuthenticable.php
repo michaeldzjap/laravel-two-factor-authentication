@@ -2,14 +2,17 @@
 
 namespace MichaelDzjap\TwoFactorAuth;
 
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use MichaelDzjap\TwoFactorAuth\TwoFactorAuth;
 
 trait TwoFactorAuthenticable
 {
     /**
      * Get the two-factor auth record associated with the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function twoFactorAuth()
+    public function twoFactorAuth() : HasOne
     {
         return $this->hasOne(TwoFactorAuth::class);
     }
@@ -20,7 +23,7 @@ trait TwoFactorAuthenticable
      * @param  string $id
      * @return void
      */
-    public function setTwoFactorAuthId(string $id)
+    public function setTwoFactorAuthId(string $id) : void
     {
         $this->twoFactorAuth->update(['id' => $id]);
     }

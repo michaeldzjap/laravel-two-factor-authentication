@@ -2,7 +2,7 @@
 
 namespace MichaelDzjap\TwoFactorAuth;
 
-use App\User;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
 
 class TwoFactorAuth extends Model
@@ -34,9 +34,11 @@ class TwoFactorAuth extends Model
 
     /**
      * Get the user that owns the two-factor auth.
+     *
+     * @param \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user()
+    public function user() : BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(\App\User::class);
     }
 }

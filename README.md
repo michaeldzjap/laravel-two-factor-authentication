@@ -1,3 +1,8 @@
+[![Latest Stable Version](https://poser.pugx.org/michaeldzjap/twofactor-auth/version)](https://packagist.org/packages/michaeldzjap/twofactor-auth)
+[![Total Downloads](https://poser.pugx.org/michaeldzjap/twofactor-auth/downloads)](https://packagist.org/packages/michaeldzjap/twofactor-auth)
+[![Latest Unstable Version](https://poser.pugx.org/michaeldzjap/twofactor-auth/v/unstable)](//packagist.org/packages/michaeldzjap/twofactor-auth)
+[![License](https://poser.pugx.org/michaeldzjap/twofactor-auth/license)](https://packagist.org/packages/michaeldzjap/twofactor-auth)
+
 # Two-Factor-Authentication
 A two-factor authentication package for Laravel >= 5.5
 

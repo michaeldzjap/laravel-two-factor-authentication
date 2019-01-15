@@ -92,8 +92,8 @@ and
 /**
  * Log out the user and start the two factor authentication state.
  *
- * @param  Request $request
- * @param  User $user
+ * @param  \Illuminate\Http\Request $request
+ * @param  \App\User $user
  * @return \Illuminate\Http\Response
  */
 private function startTwoFactorAuthProcess(Request $request, $user)
@@ -115,7 +115,7 @@ and lastly
  * Provider specific two-factor authentication logic. In the case of MessageBird
  * we just want to send an authentication token via SMS.
  *
- * @param  User $user
+ * @param  \App\User $user
  * @return mixed
  */
 private function registerUserAndSendToken(User $user)
@@ -172,12 +172,11 @@ class TwoFactorAuthController extends Controller
 
     {{-- Add this block to show an error message in case of an expired token or user lockout --}}
     @if ($errors->has('token'))
-        <div class="form-group has-error">
-            <div class="col-xs-12">
-                <span class="help-block">
-                    <strong>{{ $errors->first('token') }}</strong>
-                </span>
-            </div>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>{{ $errors->first('token') }}</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
     @endif
 ...

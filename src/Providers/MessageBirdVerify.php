@@ -25,7 +25,7 @@ class MessageBirdVerify extends BaseProvider implements TwoFactorProvider, SMSTo
     /**
      * MessageBirdVerify constructor.
      *
-     * @param  Client $client
+     * @param  \MessageBird\Client  $client
      * @return void
      */
     public function __construct(Client $client)
@@ -36,7 +36,7 @@ class MessageBirdVerify extends BaseProvider implements TwoFactorProvider, SMSTo
     /**
      * Register a user with this provider.
      *
-     * @param  User $user
+     * @param  \App\User  $user
      * @return void
      */
     public function register(User $user)
@@ -47,7 +47,7 @@ class MessageBirdVerify extends BaseProvider implements TwoFactorProvider, SMSTo
     /**
      * Unregister a user with this provider.
      *
-     * @param  User $user
+     * @param  \App\User  $user
      * @return bool
      */
     public function unregister(User $user)
@@ -61,8 +61,8 @@ class MessageBirdVerify extends BaseProvider implements TwoFactorProvider, SMSTo
     /**
      * Determine if the token is valid.
      *
-     * @param  User $user
-     * @param  string $token
+     * @param  \App\User  $user
+     * @param  string  $token
      * @return bool
      */
     public function verify(User $user, string $token)
@@ -104,11 +104,11 @@ class MessageBirdVerify extends BaseProvider implements TwoFactorProvider, SMSTo
     /**
      * Send a user a two-factor authentication token via SMS.
      *
-     * @param  User $user
+     * @param  \App\User  $user
      * @return void
-     * @throws Exception $exception
+     * @throws Exception  $exception
      */
-    public function sendSMSToken(User $user)
+    public function sendSMSToken(User $user) : void
     {
         if (!$user->mobile) {
             throw new Exception("No mobile phone number found for user {$user->id}.");

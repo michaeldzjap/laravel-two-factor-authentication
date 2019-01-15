@@ -13,7 +13,7 @@ use MichaelDzjap\TwoFactorAuth\Exceptions\TokenAlreadyProcessedException;
 use MichaelDzjap\TwoFactorAuth\Exceptions\TokenExpiredException;
 use MichaelDzjap\TwoFactorAuth\Exceptions\TokenInvalidException;
 
-class MessageBirdVerify implements TwoFactorProvider, SMSToken
+class MessageBirdVerify extends BaseProvider implements TwoFactorProvider, SMSToken
 {
     /**
      * MessageBird client instance.
@@ -25,7 +25,7 @@ class MessageBirdVerify implements TwoFactorProvider, SMSToken
     /**
      * MessageBirdVerify constructor.
      *
-     * @param  Client $client
+     * @param  \MessageBird\Client  $client
      * @return void
      */
     public function __construct(Client $client)
@@ -34,20 +34,9 @@ class MessageBirdVerify implements TwoFactorProvider, SMSToken
     }
 
     /**
-     * Check if two-factor authentication is enabled for a user.
-     *
-     * @param  User $user
-     * @return bool
-     */
-    public function enabled(User $user)
-    {
-        return $user->twoFactorAuth;
-    }
-
-    /**
      * Register a user with this provider.
      *
-     * @param  User $user
+     * @param  \App\User  $user
      * @return void
      */
     public function register(User $user)
@@ -58,7 +47,7 @@ class MessageBirdVerify implements TwoFactorProvider, SMSToken
     /**
      * Unregister a user with this provider.
      *
-     * @param  User $user
+     * @param  \App\User  $user
      * @return bool
      */
     public function unregister(User $user)
@@ -72,8 +61,8 @@ class MessageBirdVerify implements TwoFactorProvider, SMSToken
     /**
      * Determine if the token is valid.
      *
-     * @param  User $user
-     * @param  string $token
+     * @param  \App\User  $user
+     * @param  string  $token
      * @return bool
      */
     public function verify(User $user, string $token)
@@ -115,11 +104,11 @@ class MessageBirdVerify implements TwoFactorProvider, SMSToken
     /**
      * Send a user a two-factor authentication token via SMS.
      *
-     * @param  User $user
+     * @param  \App\User  $user
      * @return void
-     * @throws Exception $exception
+     * @throws Exception  $exception
      */
-    public function sendSMSToken(User $user)
+    public function sendSMSToken(User $user) : void
     {
         if (!$user->mobile) {
             throw new Exception("No mobile phone number found for user {$user->id}.");

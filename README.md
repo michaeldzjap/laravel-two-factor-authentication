@@ -3,7 +3,7 @@
 [![Latest Unstable Version](https://poser.pugx.org/michaeldzjap/twofactor-auth/v/unstable)](//packagist.org/packages/michaeldzjap/twofactor-auth)
 [![License](https://poser.pugx.org/michaeldzjap/twofactor-auth/license)](https://packagist.org/packages/michaeldzjap/twofactor-auth)
 
-# Two-Factor-Authentication
+# laravel-two-factor-authentication
 A two-factor authentication package for Laravel >= 5.5
 
 ## Description
@@ -173,7 +173,7 @@ class TwoFactorAuthController extends Controller
 ```php
 ...
 <form class="form-horizontal" role="form" method="POST" action="{{ route('login') }}">
-    {{ csrf_field() }}
+    @csrf
 
     {{-- Add this block to show an error message in case of an expired token or user lockout --}}
     @if ($errors->has('token'))
@@ -211,3 +211,6 @@ TWO_FACTOR_AUTH_DRIVER=dummy
 
 ## Errors and Exceptions
 Unfortunately the *MessageBird* php api throws rather generic exceptions when the verification of a token fails. The only way to distinguish an expired token from an invalid token is by comparing their error messages, which obviously is not a very robust mechanism. The reason this is rather unfortunate is because in the case of an invalid token we want to give the user at least a few (3) changes to re-enter the token before throttling kicks in, whereas in the case of an expired token we just want to redirect to the login screen right away.
+
+## Testing
+An example project including unit and browser tests can be found [here](https://github.com/michaeldzjap/laravel-two-factor-authentication-example).

@@ -6,16 +6,8 @@ use App\User;
 use MichaelDzjap\TwoFactorAuth\Contracts\SMSToken;
 use MichaelDzjap\TwoFactorAuth\Contracts\TwoFactorProvider;
 
-class NullProvider implements TwoFactorProvider, SMSToken
+class NullProvider extends BaseProvider implements TwoFactorProvider, SMSToken
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function enabled(User $user)
-    {
-        return $user->twoFactorAuth;
-    }
-
     /**
      * {@inheritdoc}
      */

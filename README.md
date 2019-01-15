@@ -1,4 +1,9 @@
-# Two-Factor-Authentication
+[![Latest Stable Version](https://poser.pugx.org/michaeldzjap/twofactor-auth/version)](https://packagist.org/packages/michaeldzjap/twofactor-auth)
+[![Total Downloads](https://poser.pugx.org/michaeldzjap/twofactor-auth/downloads)](https://packagist.org/packages/michaeldzjap/twofactor-auth)
+[![Latest Unstable Version](https://poser.pugx.org/michaeldzjap/twofactor-auth/v/unstable)](//packagist.org/packages/michaeldzjap/twofactor-auth)
+[![License](https://poser.pugx.org/michaeldzjap/twofactor-auth/license)](https://packagist.org/packages/michaeldzjap/twofactor-auth)
+
+# laravel-two-factor-authentication
 A two-factor authentication package for Laravel >= 5.5
 
 ## Description
@@ -92,8 +97,8 @@ and
 /**
  * Log out the user and start the two factor authentication state.
  *
- * @param  Request $request
- * @param  User $user
+ * @param  \Illuminate\Http\Request $request
+ * @param  \App\User $user
  * @return \Illuminate\Http\Response
  */
 private function startTwoFactorAuthProcess(Request $request, $user)
@@ -115,7 +120,7 @@ and lastly
  * Provider specific two-factor authentication logic. In the case of MessageBird
  * we just want to send an authentication token via SMS.
  *
- * @param  User $user
+ * @param  \App\User $user
  * @return mixed
  */
 private function registerUserAndSendToken(User $user)
@@ -168,16 +173,15 @@ class TwoFactorAuthController extends Controller
 ```php
 ...
 <form class="form-horizontal" role="form" method="POST" action="{{ route('login') }}">
-    {{ csrf_field() }}
+    @csrf
 
     {{-- Add this block to show an error message in case of an expired token or user lockout --}}
     @if ($errors->has('token'))
-        <div class="form-group has-error">
-            <div class="col-xs-12">
-                <span class="help-block">
-                    <strong>{{ $errors->first('token') }}</strong>
-                </span>
-            </div>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>{{ $errors->first('token') }}</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
     @endif
 ...
@@ -207,3 +211,6 @@ TWO_FACTOR_AUTH_DRIVER=dummy
 
 ## Errors and Exceptions
 Unfortunately the *MessageBird* php api throws rather generic exceptions when the verification of a token fails. The only way to distinguish an expired token from an invalid token is by comparing their error messages, which obviously is not a very robust mechanism. The reason this is rather unfortunate is because in the case of an invalid token we want to give the user at least a few (3) changes to re-enter the token before throttling kicks in, whereas in the case of an expired token we just want to redirect to the login screen right away.
+
+## Testing
+An example project including unit and browser tests can be found [here](https://github.com/michaeldzjap/laravel-two-factor-authentication-example).

@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use MichaelDzjap\TwoFactorAuth\Contracts\TwoFactorProvider;
+use MichaelDzjap\TwoFactorAuth\Events\TwoFactorAuthenticated;
 use MichaelDzjap\TwoFactorAuth\Exceptions\TokenAlreadyProcessedException;
 use MichaelDzjap\TwoFactorAuth\Exceptions\TokenExpiredException;
 use MichaelDzjap\TwoFactorAuth\Exceptions\TokenInvalidException;
@@ -100,7 +101,24 @@ trait TwoFactorAuthenticatesUsers
 
         $request->session()->forget('two-factor:auth');
 
-        return redirect()->intended($this->redirectPath());
+        $user = $request->user();
+
+        event(new TwoFactorAuthenticated($user));
+
+        return $this->authenticated($request, $user)
+            ?: redirect()->intended($this->redirectPath());
+    }
+
+    /**
+     * The user has been two-factor authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        //
     }
 
     /**
@@ -109,6 +127,7 @@ trait TwoFactorAuthenticatesUsers
      * we can only do it here because we don't need to redirect to the login route.
      *
      * @param  \Illuminate\Http\Request  $request
+     *
      * @throws \Illuminate\Validation\ValidationException
      */
     protected function sendFailedTwoFactorAuthResponse(Request $request)

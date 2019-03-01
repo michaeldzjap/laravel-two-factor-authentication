@@ -15,7 +15,7 @@ class CreateTwoFactorAuthsTable extends Migration
     {
         Schema::create('two_factor_auths', function (Blueprint $table) {
             $table->string('id')->nullable();
-            $table->unsignedInteger('user_id');
+            $table->bigIncrements('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });

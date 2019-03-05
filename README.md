@@ -13,6 +13,65 @@ This is a two-factor authentication package for *Laravel*. It is heavily inspire
 - This package uses throttling to limit the number of unsuccessful authentication attempts in a certain amount of time.
 - The current version of this package is only guaranteed to work with Laravel >= 5.5. Version 1.* of this package works with Laravel 5.4. Versions of Laravel prior to 5.4 have not been tested.
 
+## Important
+From _Laravel_ 5.8 and onwards, the default is to use `bigIncrements` instead of `increments` for the `id` column on the `users` table. As such, the default for this package is to use the same convention for the `user_id` column on the `two_factor_auths` table. If this is not what you want, you can change this in the published config file by setting the "big_int" option to `false`.
+
+For users who have already installed this package and hence, already have ran the migrations for this package there are essentially two different scenarios:
+
+1. You upgrade from _Laravel_ < 5.8 to 5.8 or later and have decided to keep using `increments` for the `id` column on the `users` table: You don't have to do anything. You might want to [change](#optional-correction) the signature of the `user_id` column on the `two_factor_auths` table from `increments` to `unsignedInteger` though.
+
+2. You upgrade from _Laravel_ < 5.8 to 5.8 or later and have decided to make the switch to `bigIncrements` for the `id` column on the `users` table: You will have to make and run your own migration in order to update the `user_id` column on the `two_factor_auths` table appropriately.
+
+### Optional correction
+Versions of this package prior to v2.3.0 incorrectly created the `user_id` column on the 'two_factor_auths' table using `increments` instead of `unsignedInteger`. Practically speaking, this error is of no concern. Although there is no need to have a _primary_ key for the `user_id` column, it doesn't hurt either. However, if for some reason you don't like this idea, it is safe to remove the _primary_ key using a migration of the form
+
+```php
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class RemovePrimaryFromTwoFactorAuthsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('two_factor_auths', function (Blueprint $table) {
+            $table->dropForeign(['user_id']);
+        });
+
+        Schema::table('two_factor_auths', function (Blueprint $table) {
+            $table->unsignedInteger('user_id')->change();
+            $table->dropPrimary(['user_id']);
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('two_factor_auths', function (Blueprint $table) {
+            $table->dropForeign(['user_id']);
+        });
+
+        Schema::table('two_factor_auths', function (Blueprint $table) {
+            $table->increments('user_id')->change();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        });
+    }
+}
+```
+Note that you will need the [doctrine/dbal](https://packagist.org/packages/doctrine/dbal) package for this migration to work. Furthermore, if the `id` column on your `users` table is of type `bigIncrements` you will have to change the lines `$table->unsignedInteger('user_id')->change();` to `$table->unsignedBigInteger('user_id')->change();` and `$table->increments('user_id')->change();` to `$table->bigIncrements('user_id')->change();` respectively.
+
 ## Installation
 1. To install using *Composer* run:
 ```
@@ -34,13 +93,17 @@ php artisan vendor:publish
 ```
 If you want to publish only one of these file groups, for instance if you don't need the views or language files, you can append one of the following commands to the *artisan* command: `--tag=config`, `--tag=lang` or `--tag-views`.
 
-4. Run the following *artisan* command to run the database migrations
+4. **Important**: Make sure you do this step _before_ you run any migrations for this package, as otherwise it might give you unexpected results.
+
+    From _Laravel_ 5.8 and on, the default is to use `bigIncrements` instead of `increments` for the `id` column on the `users` table. As such, the default for this package is to use the same convention for the `user_id` column on the `two_factor_auths` table. If this is not what you want, you can change this in the published config file by setting the "big_int" option to `false`.
+
+5. Run the following *artisan* command to run the database migrations
 ```
 php artisan migrate
 ```
 This will add a `mobile` column to the `users` table and create a `two_factor_auths` table.
 
-5. Add the following trait to your `User` model:
+6. Add the following trait to your `User` model:
 ```php
 ...
 use MichaelDzjap\TwoFactorAuth\TwoFactorAuthenticable;

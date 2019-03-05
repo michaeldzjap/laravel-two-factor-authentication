@@ -4,14 +4,14 @@
 [![License](https://poser.pugx.org/michaeldzjap/twofactor-auth/license)](https://packagist.org/packages/michaeldzjap/twofactor-auth)
 
 # laravel-two-factor-authentication
-A two-factor authentication package for Laravel >= 5.5
+A two-factor authentication package for _Laravel_ >= 5.5
 
 ## Description
-This is a two-factor authentication package for *Laravel*. It is heavily inspired by the [Laravel Two-Factor Authentication](https://github.com/srmklive/laravel-twofactor-authentication) package. The main differences between this package and the aforementioned package are:
+This is a two-factor authentication package for _Laravel_. It is heavily inspired by the [Laravel Two-Factor Authentication](https://github.com/srmklive/laravel-twofactor-authentication) package. The main differences between this package and the aforementioned package are:
 
 - This package currently only works with the *MessageBird Verify* api or the `'null'` driver that goes through all the steps of the two-factor authentication process without actually doing any real verification. This could be useful for testing purposes.
 - This package uses throttling to limit the number of unsuccessful authentication attempts in a certain amount of time.
-- The current version of this package is only guaranteed to work with Laravel >= 5.5. Version 1.* of this package works with Laravel 5.4. Versions of Laravel prior to 5.4 have not been tested.
+- The current version of this package is only guaranteed to work with _Laravel_ >= 5.5. Version 1.* of this package works with _Laravel_ 5.4. Versions of _Laravel_ prior to 5.4 have not been tested.
 
 ## Important
 From _Laravel_ 5.8 and onwards, the default is to use `bigIncrements` instead of `increments` for the `id` column on the `users` table. As such, the default for this package is to use the same convention for the `user_id` column on the `two_factor_auths` table. If this is not what you want, you can change this in the published config file by setting the "big_int" option to `false`.

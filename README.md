@@ -23,7 +23,7 @@ For users who have already installed this package and hence, already have ran th
 2. You upgrade from _Laravel_ < 5.8 to 5.8 or later and have decided to make the switch to `bigIncrements` for the `id` column on the `users` table: You will have to make and run your own migration in order to update the `user_id` column on the `two_factor_auths` table appropriately.
 
 ### Optional correction
-Versions of this package prior to v2.3.0 incorrectly created the `user_id` column on the 'two_factor_auths' table using `increments` instead of `unsignedInteger`. Practically speaking, this error is of no concern. Although there is no need to have a _primary_ key for the `user_id` column, it doesn't hurt either. However, if for some reason you don't like this idea, it is safe to remove the _primary_ key using a migration of the form
+Versions of this package prior to v2.3.0 incorrectly created the `user_id` column on the `two_factor_auths` table using `increments` instead of `unsignedInteger`. Practically speaking, this error is of no concern. Although there is no need to have a _primary_ key for the `user_id` column, it doesn't cause any problems either. However, if for some reason you don't like this idea, it is safe to remove the _primary_ key using a migration of the form
 
 ```php
 <?php

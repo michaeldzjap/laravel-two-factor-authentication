@@ -16,13 +16,7 @@ class CreateTwoFactorAuthsTable extends Migration
     {
         Schema::create('two_factor_auths', function (Blueprint $table) {
             $table->string('id')->nullable();
-
-            if ($this->useBigInt()) {
-                $table->unsignedBigInteger('user_id');
-            } else {
-                $table->unsignedInteger('user_id');
-            }
-
+            $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
@@ -36,16 +30,5 @@ class CreateTwoFactorAuthsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('two_factor_auths');
-    }
-
-    /**
-     * Determine if the type of the "user_id" column should be of type
-     * "unsignedBigInteger".
-     *
-     * @return bool
-     */
-    private function useBigInt()
-    {
-        return config('twofactor-auth.big_int');
     }
 }

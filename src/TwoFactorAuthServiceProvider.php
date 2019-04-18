@@ -24,20 +24,20 @@ class TwoFactorAuthServiceProvider extends ServiceProvider
     {
         $this->loadRoutesFrom(__DIR__.'/routes.php');
 
-        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
-
-        $this->loadTranslationsFrom(__DIR__.'/resources/lang', 'twofactor-auth');
-
-        $this->loadViewsFrom(__DIR__.'/resources/views', 'twofactor-auth');
-
         $this->publishes([
             __DIR__.'/config/twofactor-auth.php' => config_path('twofactor-auth.php'),
         ], 'config');
 
         $this->publishes([
+            __DIR__.'/database/migrations/' => database_path('/migrations')
+        ], 'migrations');
+
+        $this->loadTranslationsFrom(__DIR__.'/resources/lang', 'twofactor-auth');
+        $this->publishes([
             __DIR__.'/resources/lang' => resource_path('lang/vendor/twofactor-auth'),
         ], 'lang');
 
+        $this->loadViewsFrom(__DIR__.'/resources/views', 'twofactor-auth');
         $this->publishes([
             __DIR__.'/resources/views' => resource_path('views/vendor/twofactor-auth'),
         ], 'views');

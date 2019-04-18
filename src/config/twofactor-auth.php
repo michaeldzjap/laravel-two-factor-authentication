@@ -90,7 +90,7 @@ return [
 
     'models' => [
         'user' => [
-            'pk' => 'id'
+            'primaryKey' => 'id'
         ]
     ],
 

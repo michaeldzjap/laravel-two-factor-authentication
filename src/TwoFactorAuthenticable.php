@@ -14,7 +14,7 @@ trait TwoFactorAuthenticable
      */
     public function twoFactorAuth() : HasOne
     {
-        return $this->hasOne(TwoFactorAuth::class);
+        return $this->hasOne(TwoFactorAuth::class, $this->getKeyName());
     }
 
     /**

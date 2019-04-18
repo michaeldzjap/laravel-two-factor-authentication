@@ -28,9 +28,7 @@ class TwoFactorAuthServiceProvider extends ServiceProvider
             __DIR__.'/config/twofactor-auth.php' => config_path('twofactor-auth.php'),
         ], 'config');
 
-        $this->publishes([
-            __DIR__.'/database/migrations/' => database_path('/migrations')
-        ], 'migrations');
+        $this->publishMigrations();
 
         $this->loadTranslationsFrom(__DIR__.'/resources/lang', 'twofactor-auth');
         $this->publishes([
@@ -62,4 +60,21 @@ class TwoFactorAuthServiceProvider extends ServiceProvider
             return $app->make(TwoFactorAuthManager::class)->provider();
         });
     }
+
+    /**
+     * Adds current timestamp prefix.
+     */
+    protected function publishMigrations()
+    {
+        $files = [
+            'add_mobile_to_users_table.php',
+            'create_two_factor_auths_table.php',
+        ];
+        $paths = [];
+        foreach ($files as $file) {
+            $paths[__DIR__ . '/database/migrations/' . $file] = database_path('migrations/'.date('Y_m_d_His').'_'.$file);
+        }
+        $this->publishes($paths, 'migrations');
+    }
+
 }

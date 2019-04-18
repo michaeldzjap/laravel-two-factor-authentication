@@ -8,14 +8,14 @@ return [
     |--------------------------------------------------------------------------
     |
     | Options:
-    | - 'always': always require two-factor authentication
+    | - 'enabled': always require two-factor authentication
     | - 'disabled': disabled, never require two-factor authentication
-    | - 'per_user': look if a row exists in the two_factor_auths table for the
+    | - 'user': look if a row exists in the two_factor_auths table for the
     |   user
     |
     */
 
-    'enabled' => 'per_user',
+    'enabled' => 'user',
 
     /*
     |--------------------------------------------------------------------------

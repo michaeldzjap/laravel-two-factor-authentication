@@ -26,13 +26,13 @@ trait TwoFactorAuthenticable
      */
     public function setTwoFactorAuthId(string $id) : void
     {
-        $enabled = config('twofactor-auth.enabled', 'per_user');
-        if ($enabled === 'per_user') {
+        $enabled = config('twofactor-auth.enabled', 'user');
+        if ($enabled === 'user') {
             // respect when 2fa is not set for user, never insert
             $this->twoFactorAuth->update(['id' => $id]);
         }
 
-        if ($enabled === 'always') {
+        if ($enabled === 'enabled') {
             $this->upsertTwoFactorAuthId($id);
         }
     }

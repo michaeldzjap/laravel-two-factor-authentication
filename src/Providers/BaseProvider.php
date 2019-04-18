@@ -14,11 +14,11 @@ abstract class BaseProvider
      */
     public function enabled(User $user)
     {
-        $conf = config('twofactor-auth.enabled', 'per_user');
-        if ($conf === 'per_user') {
+        $conf = config('twofactor-auth.enabled', 'user');
+        if ($conf === 'user') {
             return !is_null($user->twoFactorAuth);
         }
 
-        return $conf === 'always';
+        return $conf === 'enabled';
     }
 }

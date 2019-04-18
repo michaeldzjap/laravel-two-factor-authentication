@@ -48,7 +48,10 @@ trait TwoFactorAuthenticable
     }
 
     /**
+     * Create or update a two-factor authentication record with the given id.
+     *
      * @param string $id
+     * @return void
      */
     private function upsertTwoFactorAuthId(string $id) : void
     {

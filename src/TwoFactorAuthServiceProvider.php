@@ -72,6 +72,7 @@ class TwoFactorAuthServiceProvider extends ServiceProvider
         ];
 
         $paths = [];
+
         foreach ($files as $file) {
             $paths[__DIR__ . '/database/migrations/' . $file] = database_path('migrations/'.date('Y_m_d_His').'_'.$file);
         }

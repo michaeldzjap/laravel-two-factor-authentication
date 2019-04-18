@@ -31,7 +31,7 @@ trait TwoFactorAuthenticable
             // respect when 2fa is not set for user, never insert
             $this->twoFactorAuth->update(['id' => $id]);
         }
-        elseif ($enabled) {
+        elseif ($enabled === 'always') {
             $this->upsertTwoFactorAuthId($id);
         }
     }

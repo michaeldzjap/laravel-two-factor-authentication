@@ -8,8 +8,8 @@ return [
     |--------------------------------------------------------------------------
     |
     | Options:
-    | - true: always require two-factor authentication
-    | - false: never require two-factor authentication
+    | - 'always': always require two-factor authentication
+    | - 'disabled': disabled, never require two-factor authentication
     | - 'per_user': look if a row exists in the two_factor_auths table for the
     |   user
     |
@@ -87,6 +87,7 @@ return [
     | \App\User is used, but its primary key can be specified
     |
     */
+
     'models' => [
         'user' => [
             'pk' => 'id'

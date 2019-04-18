@@ -4,6 +4,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Enabled
+    |--------------------------------------------------------------------------
+    |
+    | Options:
+    | - true: always require two-factor authentication
+    | - false: never require two-factor authentication
+    | - 'per_user': look if a row exists in the two_factor_auths table for the
+    |   user
+    |
+    */
+
+    'enabled' => 'per_user',
+
+    /*
+    |--------------------------------------------------------------------------
     | Default Two-Factor Authentication Provider
     |--------------------------------------------------------------------------
     |

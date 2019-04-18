@@ -70,6 +70,7 @@ class TwoFactorAuthServiceProvider extends ServiceProvider
             'add_mobile_to_users_table.php',
             'create_two_factor_auths_table.php',
         ];
+
         $paths = [];
         foreach ($files as $file) {
             $paths[__DIR__ . '/database/migrations/' . $file] = database_path('migrations/'.date('Y_m_d_His').'_'.$file);

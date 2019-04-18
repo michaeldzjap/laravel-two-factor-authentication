@@ -4,6 +4,7 @@ namespace MichaelDzjap\TwoFactorAuth;
 
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use MichaelDzjap\TwoFactorAuth\TwoFactorAuth;
+use Illuminate\Support\Facades\DB;
 
 trait TwoFactorAuthenticable
 {
@@ -25,7 +26,14 @@ trait TwoFactorAuthenticable
      */
     public function setTwoFactorAuthId(string $id) : void
     {
-        $this->twoFactorAuth->update(['id' => $id]);
+        $enabled = config('twofactor-auth.enabled', 'per_user');
+        if ($enabled === 'per_user') {
+            // respect when 2fa is not set for user, never insert
+            $this->twoFactorAuth->update(['id' => $id]);
+        }
+        elseif ($enabled) {
+            $this->upsertTwoFactorAuthId($id);
+        }
     }
 
     /**
@@ -36,5 +44,20 @@ trait TwoFactorAuthenticable
     public function getTwoFactorAuthId() : string
     {
         return $this->twoFactorAuth->id;
+    }
+
+    /**
+     * @param string $id
+     */
+    private function upsertTwoFactorAuthId(string $id) : void
+    {
+        DB::transaction(function () use ($id) {
+            $attributes = ['id' => $id];
+            if (!$this->twoFactorAuth()->exists()) {
+                $this->twoFactorAuth()->create($attributes);
+            } else {
+                $this->twoFactorAuth->update($attributes);
+            }
+        });
     }
 }

@@ -57,6 +57,7 @@ trait TwoFactorAuthenticable
     {
         DB::transaction(function () use ($id) {
             $attributes = ['id' => $id];
+
             if (!$this->twoFactorAuth()->exists()) {
                 $this->twoFactorAuth()->create($attributes);
             } else {

@@ -18,6 +18,7 @@ abstract class BaseProvider
         if ($conf === 'per_user') {
             return !is_null($user->twoFactorAuth);
         }
+
         return $conf === 'always';
     }
 }

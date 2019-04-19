@@ -4,6 +4,7 @@ namespace MichaelDzjap\TwoFactorAuth;
 
 use Illuminate\Support\Manager;
 use MessageBird\Client;
+use MichaelDzjap\TwoFactorAuth\Contracts\TwoFactorProvider;
 use MichaelDzjap\TwoFactorAuth\Providers\MessageBirdVerify;
 use MichaelDzjap\TwoFactorAuth\Providers\NullProvider;
 
@@ -13,9 +14,9 @@ class TwoFactorAuthManager extends Manager
      * Get a driver instance.
      *
      * @param  string  $driver
-     * @return mixed
+     * @return \MichaelDzjap\TwoFactorAuth\Contracts\TwoFactorProvider
      */
-    public function provider($driver = null)
+    public function provider(string $driver = null) : TwoFactorProvider
     {
         return $this->driver($driver);
     }
@@ -25,7 +26,7 @@ class TwoFactorAuthManager extends Manager
      *
      * @return \MichaelDzjap\TwoFactorAuth\Contracts\TwoFactorProvider
      */
-    protected function createMessageBirdDriver()
+    protected function createMessageBirdDriver() : TwoFactorProvider
     {
         return new MessageBirdVerify(
             new Client($this->app['config']['twofactor-auth.providers.messagebird.key'])
@@ -37,7 +38,7 @@ class TwoFactorAuthManager extends Manager
      *
      * @return \MichaelDzjap\TwoFactorAuth\Contracts\TwoFactorProvider
      */
-    protected function createNullDriver()
+    protected function createNullDriver() : TwoFactorProvider
     {
         return new NullProvider;
     }
@@ -47,7 +48,7 @@ class TwoFactorAuthManager extends Manager
      *
      * @return string
      */
-    public function getDefaultDriver()
+    public function getDefaultDriver() : string
     {
         return $this->app['config']['twofactor-auth.default'];
     }
@@ -58,7 +59,7 @@ class TwoFactorAuthManager extends Manager
      * @param  string  $name
      * @return void
      */
-    public function setDefaultDriver($name)
+    public function setDefaultDriver(string $name) : void
     {
         $this->app['config']['twofactor-auth.default'] = $name;
     }

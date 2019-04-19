@@ -31,7 +31,6 @@ trait TwoFactorAuthenticable
         $enabled = config('twofactor-auth.enabled', 'user');
 
         if ($enabled === 'user') {
-            // respect when 2fa is not set for user, never insert
             $this->twoFactorAuth->update(['id' => $id]);
         }
 

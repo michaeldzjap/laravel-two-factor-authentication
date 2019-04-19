@@ -160,7 +160,7 @@ trait TwoFactorAuthenticatesUsers
      *
      * @return string
      */
-    public function username()
+    public function username() : string
     {
         return 'email';
     }

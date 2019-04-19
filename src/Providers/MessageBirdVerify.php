@@ -39,7 +39,7 @@ class MessageBirdVerify extends BaseProvider implements TwoFactorProvider, SMSTo
      * @param  \App\User  $user
      * @return void
      */
-    public function register(User $user)
+    public function register(User $user) : void
     {
         //
     }

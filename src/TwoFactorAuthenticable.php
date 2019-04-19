@@ -43,7 +43,7 @@ trait TwoFactorAuthenticable
     /**
      * Get the two-factor auth id.
      *
-     * @return string $id
+     * @return string
      */
     public function getTwoFactorAuthId() : string
     {

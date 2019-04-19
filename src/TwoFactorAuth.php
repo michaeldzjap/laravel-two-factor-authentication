@@ -39,6 +39,10 @@ class TwoFactorAuth extends Model
      */
     public function user() : BelongsTo
     {
-        return $this->belongsTo(\App\User::class, 'user_id', config('twofactor-auth.models.user.primaryKey', 'id'));
+        return $this->belongsTo(
+            \App\User::class,
+            'user_id',
+            config('twofactor-auth.models.user.primaryKey', 'id')
+        );
     }
 }

@@ -9,8 +9,8 @@ interface SMSToken
     /**
      * Send a user a two-factor authentication token via SMS.
      *
-     * @param  User $user
+     * @param  \App\User  $user
      * @return void
      */
-    public function sendSMSToken(User $user);
+    public function sendSMSToken(User $user) : void;
 }

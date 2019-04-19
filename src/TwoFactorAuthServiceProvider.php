@@ -13,7 +13,7 @@ class TwoFactorAuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot() : void
     {
         $this->loadRoutesFrom(__DIR__.'/routes.php');
 
@@ -39,7 +39,7 @@ class TwoFactorAuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register() : void
     {
         $this->mergeConfigFrom(
             __DIR__.'/config/twofactor-auth.php', 'twofactor-auth'
@@ -55,9 +55,11 @@ class TwoFactorAuthServiceProvider extends ServiceProvider
     }
 
     /**
-     * Adds current timestamp prefix.
+     * Publish this package's migration files
+     *
+     * @return void
      */
-    protected function publishMigrations()
+    protected function publishMigrations() : void
     {
         $files = [
             'add_mobile_to_users_table.php',

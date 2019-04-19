@@ -4,6 +4,7 @@ namespace MichaelDzjap\TwoFactorAuth\Http\Controllers;
 
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 trait ThrottlesTwoFactorAuths
@@ -27,7 +28,7 @@ trait ThrottlesTwoFactorAuths
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    protected function incrementTwoFactorAuthAttempts(Request $request)
+    protected function incrementTwoFactorAuthAttempts(Request $request) : void
     {
         self::incrementLoginAttempts($request);
     }
@@ -54,7 +55,7 @@ trait ThrottlesTwoFactorAuths
 
         return redirect()->to('/login')
             ->withInput(
-                array_only($request->session()->get('two-factor:auth'), [$this->username(), 'remember'])
+                Arr::only($request->session()->get('two-factor:auth'), [$this->username(), 'remember'])
             )
             ->withErrors($errors);
     }
@@ -65,7 +66,7 @@ trait ThrottlesTwoFactorAuths
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    protected function clearTwoFactorAuthAttempts(Request $request)
+    protected function clearTwoFactorAuthAttempts(Request $request) : void
     {
         self::clearLoginAttempts($request);
     }
@@ -76,7 +77,7 @@ trait ThrottlesTwoFactorAuths
      * @param  \Illuminate\Http\Request  $request
      * @return string
      */
-    protected function throttleKey(Request $request)
+    protected function throttleKey(Request $request) : string
     {
         return Str::lower($request->session()->get('two-factor:auth')[$this->username()]).'|'.$request->ip();
     }

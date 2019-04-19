@@ -9,18 +9,14 @@ A two-factor authentication package for _Laravel_ >= 5.5
 ## Description
 This is a two-factor authentication package for _Laravel_. It is heavily inspired by the [Laravel Two-Factor Authentication](https://github.com/srmklive/laravel-twofactor-authentication) package. The main differences between this package and the aforementioned package are:
 
-- This package currently only works with the *MessageBird Verify* api or the `'null'` driver that goes through all the steps of the two-factor authentication process without actually doing any real verification. This could be useful for testing purposes.
+- This package currently only works out of the box with the *MessageBird Verify* api or the `'null'` driver that goes through all the steps of the two-factor authentication process without actually doing any real verification. This could be useful for testing purposes. You can however, specify a custom provider yourself.
 - This package uses throttling to limit the number of unsuccessful authentication attempts in a certain amount of time.
 - The current version of this package is only guaranteed to work with _Laravel_ >= 5.5. Version 1.* of this package works with _Laravel_ 5.4. Versions of _Laravel_ prior to 5.4 have not been tested.
 
 ## Important
-From _Laravel_ 5.8 and onwards, the default is to use `bigIncrements` instead of `increments` for the `id` column on the `users` table. As such, the default for this package is to use the same convention for the `user_id` column on the `two_factor_auths` table. If this is not what you want, you can change this in the published config file by setting the "big_int" option to `false`.
+From _Laravel_ 5.8 and onwards, the default is to use `bigIncrements` instead of `increments` for the `id` column on the `users` table. As such, the default for this package is to use the same convention for the `user_id` column on the `two_factor_auths` table. If this is not what you want, you can change this to your liking by modifying the migration files that are published for this package.
 
-For users who have already installed this package and hence, already have ran the migrations for this package there are essentially two different scenarios:
-
-1. You upgrade from _Laravel_ < 5.8 to 5.8 or later and have decided to keep using `increments` for the `id` column on the `users` table: You don't have to do anything. You might want to [change](#optional-correction) the signature of the `user_id` column on the `two_factor_auths` table from `increments` to `unsignedInteger` though.
-
-2. You upgrade from _Laravel_ < 5.8 to 5.8 or later and have decided to make the switch to `bigIncrements` for the `id` column on the `users` table: You will have to make and run your own migration in order to update the `user_id` column on the `two_factor_auths` table appropriately.
+Publishing the package's migration files allows for more flexibility with regards to customising your database structure. However, it could also cause complications if you already have ran migrations as part of installing previous versions of this package. In this case you simply might want to bypass running the migrations again or only run them when in a specific environment. The `Schema::hasColumn()` and `Schema::hasTable()` methods should be of use here.
 
 ### Optional correction
 Versions of this package prior to v2.3.0 incorrectly created the `user_id` column on the `two_factor_auths` table using `increments` instead of `unsignedInteger`. Practically speaking, this error is of no concern. Although there is no need to have a _primary_ key for the `user_id` column, it doesn't cause any problems either. However, if for some reason you don't like this idea, it is safe to remove the _primary_ key using a migration of the form
@@ -95,7 +91,7 @@ If you want to publish only one of these file groups, for instance if you don't 
 
 4. **Important**: Make sure you do this step _before_ you run any migrations for this package, as otherwise it might give you unexpected results.
 
-    From _Laravel_ 5.8 and on, the default is to use `bigIncrements` instead of `increments` for the `id` column on the `users` table. As such, the default for this package is to use the same convention for the `user_id` column on the `two_factor_auths` table. If this is not what you want, you can change this in the published config file by setting the "big_int" option to `false`.
+    From _Laravel_ 5.8 and on, the default is to use `bigIncrements` instead of `increments` for the `id` column on the `users` table. As such, the default for this package is to use the same convention for the `user_id` column on the `two_factor_auths` table. If this is not what you want, you can modify the published migration files for this package.
 
 5. Run the following *artisan* command to run the database migrations
 ```
@@ -263,7 +259,9 @@ resolve(\MichaelDzjap\TwoFactorAuth\TwoFactorAuthManager)->extend('dummy', funct
 ```php
 ...
 'dummy' => [
+
     'driver' => 'dummy',
+
 ],
 ...
 ```

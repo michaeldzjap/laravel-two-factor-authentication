@@ -7,13 +7,18 @@ use App\User;
 abstract class BaseProvider
 {
     /**
-     * Check if two-factor authentication is enabled for a user.
+     * Check if two-factor authentication is enabled, dependent on the "enabled" config option.
      *
      * @param  \App\User  $user
      * @return bool
      */
     public function enabled(User $user)
     {
-        return !is_null($user->twoFactorAuth);
+        $conf = config('twofactor-auth.enabled', 'user');
+        if ($conf === 'user') {
+            return !is_null($user->twoFactorAuth);
+        }
+
+        return $conf === 'enabled';
     }
 }

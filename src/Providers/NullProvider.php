@@ -35,7 +35,7 @@ class NullProvider extends BaseProvider implements TwoFactorProvider, SMSToken
     /**
      * {@inheritdoc}
      */
-    public function sendSMSToken(User $user)
+    public function sendSMSToken(User $user) : void
     {
         //
     }

@@ -8,10 +8,10 @@ return [
     |--------------------------------------------------------------------------
     |
     | Options:
-    | - 'enabled': always require two-factor authentication
-    | - 'disabled': disabled, never require two-factor authentication
-    | - 'user': look if a row exists in the two_factor_auths table for the
-    |   user
+    |
+    | - 'always': Always require two-factor authentication.
+    | - 'never': Never require two-factor authentication.
+    | - 'user': Specify manually for which users to enable 2fa.
     |
     */
 
@@ -72,26 +72,31 @@ return [
     */
 
     'routes' => [
+
         'get' => [
             'url' => '/auth/token',
             'name' => 'auth.token',
         ],
+
         'post' => '/auth/token',
+
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Model setttings
+    | Model Setttings
     |--------------------------------------------------------------------------
     |
-    | \App\User is used, but its primary key can be specified
+    | Here you can specify some custom properties of the default user model.
     |
     */
 
     'models' => [
+
         'user' => [
-            'primaryKey' => 'id'
-        ]
+            'primaryKey' => 'id',
+        ],
+
     ],
 
 ];

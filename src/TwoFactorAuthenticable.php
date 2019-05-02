@@ -9,6 +9,15 @@ use Illuminate\Support\Facades\DB;
 trait TwoFactorAuthenticable
 {
     /**
+     * Get the mobile phone number to be used. Override in your User model to suit your application.
+     * @return string
+     */
+    public function getMobile() : string
+    {
+        return $this->mobile;
+    }
+
+    /**
      * Get the two-factor auth record associated with the user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

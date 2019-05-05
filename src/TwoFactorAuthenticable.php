@@ -9,7 +9,10 @@ use Illuminate\Support\Facades\DB;
 trait TwoFactorAuthenticable
 {
     /**
-     * Get the mobile phone number to be used. Override in your User model to suit your application.
+     * Get the mobile phone number associated with the user.
+     *
+     * Override in your User model to suit your application.
+     *
      * @return string
      */
     public function getMobile() : string

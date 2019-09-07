@@ -48,7 +48,7 @@ class TwoFactorAuth extends Model
     {
         $model = $this->model();
 
-        return $this->belongsTo($model, 'user_id', $model->getKeyName());
+        return $this->belongsTo($model, 'user_id', (new $model)->getKeyName());
     }
 
     /**

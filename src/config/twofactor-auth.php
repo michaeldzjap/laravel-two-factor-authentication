@@ -84,19 +84,14 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Model Setttings
+    | Model
     |--------------------------------------------------------------------------
     |
-    | Here you can specify some custom properties of the default user model.
+    | Here you can optionally specify the user model that should be used. The
+    | standard "Eloquent" user model is configured by default.
     |
     */
 
-    'models' => [
-
-        'user' => [
-            'primaryKey' => 'id',
-        ],
-
-    ],
+    'model' => \App\User::class,
 
 ];

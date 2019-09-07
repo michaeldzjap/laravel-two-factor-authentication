@@ -8,12 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class TwoFactorAuth extends Model
 {
     /**
+     * The reference to the user model.
+     *
+     * @var string
+     */
+    private $model;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'id', 'user_id'
+        'id', 'user_id',
     ];
 
     /**
@@ -22,7 +29,7 @@ class TwoFactorAuth extends Model
      * @var array
      */
     protected $hidden = [
-        'id'
+        'id',
     ];
 
     /**
@@ -39,10 +46,22 @@ class TwoFactorAuth extends Model
      */
     public function user() : BelongsTo
     {
-        return $this->belongsTo(
-            \App\User::class,
-            'user_id',
-            config('twofactor-auth.models.user.primaryKey', 'id')
-        );
+        $model = $this->model();
+
+        return $this->belongsTo($model, 'user_id', (new $model)->getKeyName());
+    }
+
+    /**
+     * Get the reference to the user model.
+     *
+     * @return string
+     */
+    private function model() : string
+    {
+        if (is_null($this->model)) {
+            $this->model = config('twofactor-auth.model');
+        }
+
+        return $this->model;
     }
 }

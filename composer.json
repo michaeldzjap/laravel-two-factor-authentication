@@ -1,0 +1,20 @@
+{
+    "name": "michaeldzjap/twofactor-auth",
+    "description": "A two-factor authentication package for Laravel 5.4 tuned for use with MessageBird Verify",
+    "keywords": ["authentication", "two-factor", "2fa", "messagebird", "laravel"],
+    "homepage": "https://github.com/michaeldzjap/twofactor-authentication",
+    "license": "MIT",
+    "type": "package",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Michael Dzjaparidze",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "MichaelDzjap\\TwoFactorAuth\\": "src/"
+        }
+    }
+}

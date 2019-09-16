@@ -9,7 +9,7 @@
     "authors": [
         {
             "name": "Michael Dzjaparidze",
-            "email": "***REMOVED***"
+            "role": "Developer"
         }
     ],
     "autoload": {

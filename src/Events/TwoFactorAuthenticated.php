@@ -2,7 +2,6 @@
 
 namespace MichaelDzjap\TwoFactorAuth\Events;
 
-use App\User;
 use Illuminate\Queue\SerializesModels;
 
 class TwoFactorAuthenticated
@@ -12,17 +11,17 @@ class TwoFactorAuthenticated
     /**
      * The user instance.
      *
-     * @var \App\User
+     * @var mixed
      */
     public $user;
 
     /**
      * Create a new event instance.
      *
-     * @param  \App\User  $user
+     * @param  mixed  $user
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct($user)
     {
         $this->user = $user;
     }

@@ -2,7 +2,6 @@
 
 namespace MichaelDzjap\TwoFactorAuth\Http\Controllers;
 
-use App\User;
 use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -76,7 +75,9 @@ trait TwoFactorAuthenticatesUsers
      */
     protected function attemptTwoFactorAuth(Request $request)
     {
-        $user = User::findOrFail($request->session()->get('two-factor:auth')['id']);
+        $user = config('twofactor-auth.model')::findOrFail(
+            $request->session()->get('two-factor:auth')['id']
+        );
 
         if (resolve(TwoFactorProvider::class)->verify($user, $request->input('token'))) {
             auth()->login($user);   // If SMS code validation passes, login user

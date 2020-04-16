@@ -3,7 +3,6 @@
 namespace MichaelDzjap\TwoFactorAuth\Providers;
 
 use Exception;
-use App\User;
 use MessageBird\Client;
 use MessageBird\Exceptions\RequestException;
 use MessageBird\Objects\Verify;
@@ -36,10 +35,10 @@ class MessageBirdVerify extends BaseProvider implements TwoFactorProvider, SMSTo
     /**
      * Register a user with this provider.
      *
-     * @param  \App\User  $user
+     * @param  mixed  $user
      * @return void
      */
-    public function register(User $user) : void
+    public function register($user) : void
     {
         //
     }
@@ -47,10 +46,10 @@ class MessageBirdVerify extends BaseProvider implements TwoFactorProvider, SMSTo
     /**
      * Unregister a user with this provider.
      *
-     * @param  \App\User  $user
+     * @param  mixed  $user
      * @return bool
      */
-    public function unregister(User $user)
+    public function unregister($user)
     {
         $result = $this->client->verify->delete($user->getTwoFactorAuthId());
         $user->setTwoFactorAuthId(null);
@@ -61,11 +60,11 @@ class MessageBirdVerify extends BaseProvider implements TwoFactorProvider, SMSTo
     /**
      * Determine if the token is valid.
      *
-     * @param  \App\User  $user
+     * @param  mixed  $user
      * @param  string  $token
      * @return bool
      */
-    public function verify(User $user, string $token)
+    public function verify($user, string $token)
     {
         // Parse potential MessageBird exceptions. Unfortunately a rather generic
         // RequestException is thrown both in the case of an expired token as well as
@@ -104,11 +103,11 @@ class MessageBirdVerify extends BaseProvider implements TwoFactorProvider, SMSTo
     /**
      * Send a user a two-factor authentication token via SMS.
      *
-     * @param  \App\User  $user
+     * @param  mixed  $user
      * @return void
      * @throws Exception  $exception
      */
-    public function sendSMSToken(User $user) : void
+    public function sendSMSToken($user) : void
     {
         if (!$user->getMobile()) {
             throw new Exception("No mobile phone number found for user {$user->id}.");

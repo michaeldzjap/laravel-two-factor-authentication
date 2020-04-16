@@ -2,17 +2,15 @@
 
 namespace MichaelDzjap\TwoFactorAuth\Providers;
 
-use App\User;
-
 abstract class BaseProvider
 {
     /**
      * Check if two-factor authentication is enabled.
      *
-     * @param  \App\User  $user
+     * @param  mixed  $user
      * @return bool
      */
-    public function enabled(User $user)
+    public function enabled($user)
     {
         $enabled = config('twofactor-auth.enabled', 'user');
 

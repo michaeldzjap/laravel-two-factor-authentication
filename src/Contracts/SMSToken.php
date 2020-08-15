@@ -10,5 +10,5 @@ interface SMSToken
      * @param  mixed  $user
      * @return void
      */
-    public function sendSMSToken($user) : void;
+    public function sendSMSToken($user): void;
 }

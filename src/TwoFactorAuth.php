@@ -44,7 +44,7 @@ class TwoFactorAuth extends Model
      *
      * @param \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user() : BelongsTo
+    public function user(): BelongsTo
     {
         $model = $this->model();
 
@@ -56,7 +56,7 @@ class TwoFactorAuth extends Model
      *
      * @return string
      */
-    private function model() : string
+    private function model(): string
     {
         if (is_null($this->model)) {
             $this->model = config('twofactor-auth.model');

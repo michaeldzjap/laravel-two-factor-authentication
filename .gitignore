@@ -1,4 +1,5 @@
 /.idea
 /.scannerwork
+/vendor
 .DS_Store
 .Thumbs.db

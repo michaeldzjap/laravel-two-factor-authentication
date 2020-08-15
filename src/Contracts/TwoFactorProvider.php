@@ -18,7 +18,7 @@ interface TwoFactorProvider
      * @param  mixed  $user
      * @return void
      */
-    public function register($user) : void;
+    public function register($user): void;
 
     /**
      * Unregister a user with this provider.

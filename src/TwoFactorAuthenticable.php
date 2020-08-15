@@ -3,7 +3,6 @@
 namespace MichaelDzjap\TwoFactorAuth;
 
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use MichaelDzjap\TwoFactorAuth\TwoFactorAuth;
 use Illuminate\Support\Facades\DB;
 
 trait TwoFactorAuthenticable
@@ -15,7 +14,7 @@ trait TwoFactorAuthenticable
      *
      * @return string
      */
-    public function getMobile() : string
+    public function getMobile(): string
     {
         return $this->mobile;
     }
@@ -25,10 +24,10 @@ trait TwoFactorAuthenticable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function twoFactorAuth() : HasOne
+    public function twoFactorAuth(): HasOne
     {
         return $this->hasOne(
-            TwoFactorAuth::class, 'user_id', $this->getKeyName()
+            \MichaelDzjap\TwoFactorAuth\TwoFactorAuth::class, 'user_id', $this->getKeyName()
         );
     }
 
@@ -38,7 +37,7 @@ trait TwoFactorAuthenticable
      * @param  string  $id
      * @return void
      */
-    public function setTwoFactorAuthId(string $id) : void
+    public function setTwoFactorAuthId(string $id): void
     {
         $enabled = config('twofactor-auth.enabled', 'user');
 
@@ -56,7 +55,7 @@ trait TwoFactorAuthenticable
      *
      * @return string
      */
-    public function getTwoFactorAuthId() : string
+    public function getTwoFactorAuthId(): string
     {
         return $this->twoFactorAuth->id;
     }
@@ -67,12 +66,12 @@ trait TwoFactorAuthenticable
      * @param  string  $id
      * @return void
      */
-    private function upsertTwoFactorAuthId(string $id) : void
+    private function upsertTwoFactorAuthId(string $id): void
     {
         DB::transaction(function () use ($id) {
             $attributes = ['id' => $id];
 
-            if (!$this->twoFactorAuth()->exists()) {
+            if (! $this->twoFactorAuth()->exists()) {
                 $this->twoFactorAuth()->create($attributes);
             } else {
                 $this->twoFactorAuth->update($attributes);

@@ -15,7 +15,7 @@ abstract class BaseProvider
         $enabled = config('twofactor-auth.enabled', 'user');
 
         if ($enabled === 'user') {
-            return !is_null($user->twoFactorAuth);
+            return ! is_null($user->twoFactorAuth);
         }
 
         return $enabled === 'always';

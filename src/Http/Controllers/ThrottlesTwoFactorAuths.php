@@ -28,7 +28,7 @@ trait ThrottlesTwoFactorAuths
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    protected function incrementTwoFactorAuthAttempts(Request $request) : void
+    protected function incrementTwoFactorAuthAttempts(Request $request): void
     {
         self::incrementLoginAttempts($request);
     }
@@ -66,7 +66,7 @@ trait ThrottlesTwoFactorAuths
      * @param  \Illuminate\Http\Request  $request
      * @return void
      */
-    protected function clearTwoFactorAuthAttempts(Request $request) : void
+    protected function clearTwoFactorAuthAttempts(Request $request): void
     {
         self::clearLoginAttempts($request);
     }
@@ -77,7 +77,7 @@ trait ThrottlesTwoFactorAuths
      * @param  \Illuminate\Http\Request  $request
      * @return string
      */
-    protected function throttleKey(Request $request) : string
+    protected function throttleKey(Request $request): string
     {
         return Str::lower($request->session()->get('two-factor:auth')[$this->username()]).'|'.$request->ip();
     }

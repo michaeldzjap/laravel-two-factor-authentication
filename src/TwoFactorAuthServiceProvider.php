@@ -13,7 +13,7 @@ class TwoFactorAuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot() : void
+    public function boot(): void
     {
         $this->loadRoutesFrom(__DIR__.'/routes.php');
 
@@ -39,7 +39,7 @@ class TwoFactorAuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register() : void
+    public function register(): void
     {
         $this->mergeConfigFrom(
             __DIR__.'/config/twofactor-auth.php', 'twofactor-auth'
@@ -55,11 +55,11 @@ class TwoFactorAuthServiceProvider extends ServiceProvider
     }
 
     /**
-     * Publish this package's migration files
+     * Publish this package's migration files.
      *
      * @return void
      */
-    protected function publishMigrations() : void
+    protected function publishMigrations(): void
     {
         $files = [
             'add_mobile_to_users_table.php',
@@ -69,10 +69,9 @@ class TwoFactorAuthServiceProvider extends ServiceProvider
         $paths = [];
 
         foreach ($files as $file) {
-            $paths[__DIR__.'/database/migrations/'. $file] = database_path('migrations/'.date('Y_m_d_His').'_'.$file);
+            $paths[__DIR__.'/database/migrations/'.$file] = database_path('migrations/'.date('Y_m_d_His').'_'.$file);
         }
 
         $this->publishes($paths, 'migrations');
     }
-
 }

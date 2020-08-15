@@ -38,7 +38,7 @@ class MessageBirdVerify extends BaseProvider implements TwoFactorProvider, SMSTo
      * @param  mixed  $user
      * @return void
      */
-    public function register($user) : void
+    public function register($user): void
     {
         //
     }
@@ -107,9 +107,9 @@ class MessageBirdVerify extends BaseProvider implements TwoFactorProvider, SMSTo
      * @return void
      * @throws Exception  $exception
      */
-    public function sendSMSToken($user) : void
+    public function sendSMSToken($user): void
     {
-        if (!$user->getMobile()) {
+        if (! $user->getMobile()) {
             throw new Exception("No mobile phone number found for user {$user->id}.");
         }
 

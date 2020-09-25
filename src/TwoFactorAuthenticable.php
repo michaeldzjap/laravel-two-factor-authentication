@@ -27,7 +27,7 @@ trait TwoFactorAuthenticable
     public function twoFactorAuth(): HasOne
     {
         return $this->hasOne(
-            \MichaelDzjap\TwoFactorAuth\TwoFactorAuth::class, 'user_id', $this->getKeyName()
+            \MichaelDzjap\TwoFactorAuth\Models\TwoFactorAuth::class, 'user_id', $this->getKeyName()
         );
     }
 

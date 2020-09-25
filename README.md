@@ -163,7 +163,7 @@ The first route is the route the user will be redirected to once the two-factor 
   * Log out the user and start the two factor authentication state.
   *
   * @param  \Illuminate\Http\Request $request
-  * @param  \App\User $user
+  * @param  \App\Models\User $user
   * @return \Illuminate\Http\Response
   */
  private function startTwoFactorAuthProcess(Request $request, $user)
@@ -185,7 +185,7 @@ The first route is the route the user will be redirected to once the two-factor 
   * Provider specific two-factor authentication logic. In the case of MessageBird
   * we just want to send an authentication token via SMS.
   *
-  * @param  \App\User $user
+  * @param  \App\Models\User $user
   * @return mixed
   */
  private function registerUserAndSendToken(User $user)

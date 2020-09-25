@@ -1,12 +1,16 @@
 <?php
 
-namespace MichaelDzjap\TwoFactorAuth;
+namespace MichaelDzjap\TwoFactorAuth\Models;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TwoFactorAuth extends Model
 {
+    use HasFactory;
+
     /**
      * The reference to the user model.
      *
@@ -63,5 +67,15 @@ class TwoFactorAuth extends Model
         }
 
         return $this->model;
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory(): Factory
+    {
+        return \MichaelDzjap\TwoFactorAuth\Database\Factories\TwoFactorAuthFactory::new();
     }
 }

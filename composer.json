@@ -7,7 +7,7 @@
     "type": "package",
     "minimum-stability": "dev",
     "require": {
-        "illuminate/support": "^5.5.0 || ^6.0 || ^7.0"
+        "illuminate/support": "^8.0"
     },
     "extra": {
         "laravel": {

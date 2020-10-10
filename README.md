@@ -8,6 +8,16 @@
 # laravel-two-factor-authentication
 A two-factor authentication package for _Laravel_ >= 8 (for Laravel 5 to 7 you will need version 1 or 2 of this package)
 
+## Table of Contents
+
+- [Description](#description)
+- [Important](#important)
+- [Installation](#installation)
+- [Changes to the Login Process](#changes-to-the-login-process)
+- [Using a Custom Provider](#using-a-custom-provider)
+- [Errors and Exceptions](#errors-and-exceptions)
+- [Testing](#testing)
+
 ## Description
 This is a two-factor authentication package for _Laravel_. It is heavily inspired by the [Laravel Two-Factor Authentication](https://github.com/srmklive/laravel-twofactor-authentication) package. The main differences between this package and the aforementioned package are:
 

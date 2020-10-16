@@ -134,7 +134,7 @@ trait TwoFactorAuthenticatesUsers
 
         if ($path = $this->redirectAfterFailurePath()) {
             return redirect()->to($path)->withErrors([
-                'token' => __('twofactor-auth::twofactor-auth.failed')
+                'token' => __('twofactor-auth::twofactor-auth.failed'),
             ]);
         }
 

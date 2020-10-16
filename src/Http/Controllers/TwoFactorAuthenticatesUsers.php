@@ -119,10 +119,32 @@ trait TwoFactorAuthenticatesUsers
     /**
      * Handle the case where a user has submitted an invalid token.
      *
+     * Default: If the two-factor authentication attempt was unsuccessful we
+     * will increment the number of attempts to two-factor authenticate and
+     * redirect the user back to the two-factor authentication form. Of course,
+     * when this user surpasses their maximum number of attempts they will get
+     * locked out.
+     *
      * @param  \Illuminate\Http\Request  $request
-     * @return mixed
+     * @return \Illuminate\Http\Response
      */
     protected function handleFailedAttempt(Request $request)
+    {
+        $this->incrementTwoFactorAuthAttempts($request);
+
+        if ($path = $this->redirectAfterFailurePath()) {
+            return redirect($path);
+        }
+
+        return $this->sendFailedTwoFactorAuthResponse($request);
+    }
+
+    /**
+     * Get the post two-factor authentication failure redirect path.
+     *
+     * @return null|string
+     */
+    protected function redirectAfterFailurePath(): ?string
     {
         if (method_exists($this, 'redirectToAfterFailure')) {
             return $this->redirectToAfterFailure();
@@ -132,13 +154,7 @@ trait TwoFactorAuthenticatesUsers
             return $this->redirectToAfterFailure;
         }
 
-        // If the two-factor authentication attempt was unsuccessful we will increment
-        // the number of attempts to two-factor authenticate and redirect the user
-        // back to the two-factor authentication form. Of course, when this user
-        // surpasses their maximum number of attempts they will get locked out.
-        $this->incrementTwoFactorAuthAttempts($request);
-
-        return $this->sendFailedTwoFactorAuthResponse($request);
+        return null;
     }
 
     /**

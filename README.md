@@ -268,7 +268,7 @@ The first route is the route the user will be redirected to once the two-factor 
 ### Failed Verification Attempt Handling
 The default behaviour is to redirect to the previous view with an error message in case token verification fails. However, there most likely are instances where you would like to handle a failed token verification attempt differently. For instance, in the case of _MessageBird_ a token can only be verified once. Any attempt with the same token after a first failed attempt will always throw a `TokenAlreadyProcessedException` and hence, it would make more sense to either redirect to the _/login_ route again to start the entire authentication process from scratch or to redirect to a view where a new token can be requested.
 
-In order to change the default behaviour it is possible to specify either a `$redirectToAfterFailure` property or a protected `redirectToAfterFailure` method on your `TwoFactorAuthController`. If one of these is present (the method taking precedence over the property), the default behaviour is bypassed and the user will be redirected to the specified route. To give a simple example, suppose you simply want to redirect to the _'/login'_ route after a failed verification attempt you would structure your `TwoFactorAuthController` like:
+In order to change the default behaviour it is possible to specify either a `$redirectToAfterFailure` property or a protected `redirectToAfterFailure` method on your `TwoFactorAuthController`. If one of these is present (the method taking precedence over the property), the default behaviour is bypassed and the user will be redirected to the specified route. To give a simple example, suppose you simply want to redirect to the _/login_ route after a failed verification attempt you would structure your `TwoFactorAuthController` like:
 ```php
 <?php
 
@@ -281,20 +281,6 @@ use MichaelDzjap\TwoFactorAuth\Http\Controllers\TwoFactorAuthenticatesUsers;
 class TwoFactorAuthController extends Controller
 {
     use TwoFactorAuthenticatesUsers;
-
-    /**
-     * The maximum number of attempts to allow.
-     *
-     * @var int
-     */
-    protected $maxAttempts = 5;
-
-    /**
-     * The number of minutes to throttle for.
-     *
-     * @var int
-     */
-    protected $decayMinutes = 1;
 
     /**
      * Where to redirect users after two-factor authentication passes.
@@ -311,6 +297,7 @@ class TwoFactorAuthController extends Controller
     protected $redirectToAfterFailure = '/login';
 }
 ```
+Redirecting a user to a route for generating a fresh authentication token would require a bit more work, but certainly is possible this way.
 
 ## Using a Custom Provider
 Since the v2.1.0 release it is possible to user your own custom provider. To do so your provider needs to implement `MichaelDzjap\TwoFactorAuth\Contracts\TwoFactorProvider` (and possibly `MichaelDzjap\TwoFactorAuth\Contracts\SMSToken` if you want to send the authentication token via SMS).

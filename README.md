@@ -12,8 +12,10 @@ A two-factor authentication package for _Laravel_ >= 8 (for Laravel 5 to 7 you w
 
 - [Description](#description)
 - [Important](#important)
+  - [Optional Correction](#optional-correction)
 - [Installation](#installation)
 - [Changes to the Login Process](#changes-to-the-login-process)
+  - [Failed Verification Attempt Handling](#failed-verification-attempt-handling)
 - [Using a Custom Provider](#using-a-custom-provider)
 - [Errors and Exceptions](#errors-and-exceptions)
 - [Testing](#testing)
@@ -30,7 +32,7 @@ From _Laravel_ 5.8 and onwards, the default is to use `bigIncrements` instead of
 
 Publishing the package's migration files allows for more flexibility with regards to customising your database structure. However, it could also cause complications if you already have ran migrations as part of installing previous versions of this package. In this case you simply might want to bypass running the migrations again or only run them when in a specific environment. The `Schema::hasColumn()` and `Schema::hasTable()` methods should be of use here.
 
-### Optional correction
+### Optional Correction
 Versions of this package prior to v2.3.0 incorrectly created the `user_id` column on the `two_factor_auths` table using `increments` instead of `unsignedInteger`. Practically speaking, this error is of no concern. Although there is no need to have a _primary_ key for the `user_id` column, it doesn't cause any problems either. However, if for some reason you don't like this idea, it is safe to remove the _primary_ key using a migration of the form
 
 ```php
@@ -216,6 +218,7 @@ The first route is the route the user will be redirected to once the two-factor 
  namespace App\Http\Controllers\Auth;
 
  use App\Http\Controllers\Controller;
+ use App\Providers\RouteServiceProvider;
  use MichaelDzjap\TwoFactorAuth\Http\Controllers\TwoFactorAuthenticatesUsers;
 
  class TwoFactorAuthController extends Controller
@@ -241,7 +244,7 @@ The first route is the route the user will be redirected to once the two-factor 
       *
       * @var string
       */
-     protected $redirectTo = '/home';
+     protected $redirectTo = RouteServiceProvider::HOME;
  }
  ```
 3. If you want to give textual feedback to the user when two-factor authentication fails due to an expired token or when throttling kicks in you may want to add this to `resources/views/auth/login.blade.php`:
@@ -261,6 +264,53 @@ The first route is the route the user will be redirected to once the two-factor 
      @endif
  ...
  ```
+
+### Failed Verification Attempt Handling
+The default behaviour is to redirect to the previous view with an error message in case token verification fails. However, there most likely are instances where you would like to handle a failed token verification attempt differently. For instance, in the case of _MessageBird_ a token can only be verified once. Any attempt with the same token after a first failed attempt will always throw a `TokenAlreadyProcessedException` and hence, it would make more sense to either redirect to the _/login_ route again to start the entire authentication process from scratch or to redirect to a view where a new token can be requested.
+
+In order to change the default behaviour it is possible to specify either a `$redirectToAfterFailure` property or a protected `redirectToAfterFailure` method on your `TwoFactorAuthController`. If one of these is present (the method taking precedence over the property), the default behaviour is bypassed and the user will be redirected to the specified route. To give a simple example, suppose you simply want to redirect to the _'/login'_ route after a failed verification attempt you would structure your `TwoFactorAuthController` like:
+```php
+<?php
+
+namespace App\Http\Controllers\Auth;
+
+use App\Http\Controllers\Controller;
+use App\Providers\RouteServiceProvider;
+use MichaelDzjap\TwoFactorAuth\Http\Controllers\TwoFactorAuthenticatesUsers;
+
+class TwoFactorAuthController extends Controller
+{
+    use TwoFactorAuthenticatesUsers;
+
+    /**
+     * The maximum number of attempts to allow.
+     *
+     * @var int
+     */
+    protected $maxAttempts = 5;
+
+    /**
+     * The number of minutes to throttle for.
+     *
+     * @var int
+     */
+    protected $decayMinutes = 1;
+
+    /**
+     * Where to redirect users after two-factor authentication passes.
+     *
+     * @var string
+     */
+    protected $redirectTo = RouteServiceProvider::HOME;
+
+    /**
+     * Where to redirect users after two-factor authentication fails.
+     *
+     * @var string
+     */
+    protected $redirectToAfterFailure = '/login';
+}
+```
 
 ## Using a Custom Provider
 Since the v2.1.0 release it is possible to user your own custom provider. To do so your provider needs to implement `MichaelDzjap\TwoFactorAuth\Contracts\TwoFactorProvider` (and possibly `MichaelDzjap\TwoFactorAuth\Contracts\SMSToken` if you want to send the authentication token via SMS).

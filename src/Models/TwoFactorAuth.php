@@ -76,6 +76,6 @@ class TwoFactorAuth extends Model
      */
     protected static function newFactory(): Factory
     {
-        return \MichaelDzjap\TwoFactorAuth\Database\Factories\TwoFactorAuthFactory::new();
+        return \MichaelDzjap\TwoFactorAuth\Factories\TwoFactorAuthFactory::new();
     }
 }

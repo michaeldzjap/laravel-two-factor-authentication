@@ -1,6 +1,6 @@
 <?php
 
-namespace MichaelDzjap\TwoFactorAuth\Database\Factories;
+namespace MichaelDzjap\TwoFactorAuth\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use MichaelDzjap\TwoFactorAuth\Models\TwoFactorAuth;

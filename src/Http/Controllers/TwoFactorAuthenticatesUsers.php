@@ -58,13 +58,7 @@ trait TwoFactorAuthenticatesUsers
             return $this->sendTwoFactorAuthResponse($request);
         }
 
-        // If the two-factor authentication attempt was unsuccessful we will increment
-        // the number of attempts to two-factor authenticate and redirect the user
-        // back to the two-factor authentication form. Of course, when this user
-        // surpasses their maximum number of attempts they will get locked out.
-        $this->incrementTwoFactorAuthAttempts($request);
-
-        return $this->sendFailedTwoFactorAuthResponse($request);
+        return $this->handleFailedAttempt($request);
     }
 
     /**
@@ -120,6 +114,31 @@ trait TwoFactorAuthenticatesUsers
     protected function authenticated(Request $request, $user)
     {
         //
+    }
+
+    /**
+     * Handle the case where a user has submitted an invalid token.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return mixed
+     */
+    protected function handleFailedAttempt(Request $request)
+    {
+        if (method_exists($this, 'redirectToAfterFailure')) {
+            return $this->redirectToAfterFailure();
+        }
+
+        if (property_exists($this, 'redirectToAfterFailure')) {
+            return $this->redirectToAfterFailure;
+        }
+
+        // If the two-factor authentication attempt was unsuccessful we will increment
+        // the number of attempts to two-factor authenticate and redirect the user
+        // back to the two-factor authentication form. Of course, when this user
+        // surpasses their maximum number of attempts they will get locked out.
+        $this->incrementTwoFactorAuthAttempts($request);
+
+        return $this->sendFailedTwoFactorAuthResponse($request);
     }
 
     /**

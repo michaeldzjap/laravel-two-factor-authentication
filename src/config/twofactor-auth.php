@@ -4,21 +4,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Enabled
-    |--------------------------------------------------------------------------
-    |
-    | Options:
-    |
-    | - 'always': Always require two-factor authentication.
-    | - 'never': Never require two-factor authentication.
-    | - 'user': Specify manually for which users to enable 2fa.
-    |
-    */
-
-    'enabled' => 'user',
-
-    /*
-    |--------------------------------------------------------------------------
     | Default Two-Factor Authentication Provider
     |--------------------------------------------------------------------------
     |
@@ -60,6 +45,21 @@ return [
         ],
 
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Enabled Mode
+    |--------------------------------------------------------------------------
+    |
+    | Options:
+    |
+    | 'always': Always require two-factor authentication.
+    | 'never': Never require two-factor authentication.
+    | 'user': Specify manually for which users to enable 2fa.
+    |
+    */
+
+    'enabled' => 'user',
 
     /*
     |--------------------------------------------------------------------------

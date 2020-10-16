@@ -58,13 +58,7 @@ trait TwoFactorAuthenticatesUsers
             return $this->sendTwoFactorAuthResponse($request);
         }
 
-        // If the two-factor authentication attempt was unsuccessful we will increment
-        // the number of attempts to two-factor authenticate and redirect the user
-        // back to the two-factor authentication form. Of course, when this user
-        // surpasses their maximum number of attempts they will get locked out.
-        $this->incrementTwoFactorAuthAttempts($request);
-
-        return $this->sendFailedTwoFactorAuthResponse($request);
+        return $this->handleFailedAttempt($request);
     }
 
     /**
@@ -120,6 +114,49 @@ trait TwoFactorAuthenticatesUsers
     protected function authenticated(Request $request, $user)
     {
         //
+    }
+
+    /**
+     * Handle the case where a user has submitted an invalid token.
+     *
+     * Default: If the two-factor authentication attempt was unsuccessful we
+     * will increment the number of attempts to two-factor authenticate and
+     * redirect the user back to the two-factor authentication form. Of course,
+     * when this user surpasses their maximum number of attempts they will get
+     * locked out.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    protected function handleFailedAttempt(Request $request)
+    {
+        $this->incrementTwoFactorAuthAttempts($request);
+
+        if ($path = $this->redirectAfterFailurePath()) {
+            return redirect()->to($path)->withErrors([
+                'token' => __('twofactor-auth::twofactor-auth.failed'),
+            ]);
+        }
+
+        return $this->sendFailedTwoFactorAuthResponse($request);
+    }
+
+    /**
+     * Get the post two-factor authentication failure redirect path.
+     *
+     * @return null|string
+     */
+    protected function redirectAfterFailurePath(): ?string
+    {
+        if (method_exists($this, 'redirectToAfterFailure')) {
+            return $this->redirectToAfterFailure();
+        }
+
+        if (property_exists($this, 'redirectToAfterFailure')) {
+            return $this->redirectToAfterFailure;
+        }
+
+        return null;
     }
 
     /**

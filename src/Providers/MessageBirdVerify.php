@@ -105,7 +105,8 @@ class MessageBirdVerify extends BaseProvider implements TwoFactorProvider, SMSTo
      *
      * @param  mixed  $user
      * @return void
-     * @throws Exception  $exception
+     *
+     * @throws Exception $exception
      */
     public function sendSMSToken($user): void
     {

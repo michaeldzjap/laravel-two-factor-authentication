@@ -1,8 +1,7 @@
 [![Latest Stable Version](https://poser.pugx.org/michaeldzjap/twofactor-auth/version)](https://packagist.org/packages/michaeldzjap/twofactor-auth)
 [![Total Downloads](https://poser.pugx.org/michaeldzjap/twofactor-auth/downloads)](https://packagist.org/packages/michaeldzjap/twofactor-auth)
 [![Latest Unstable Version](https://poser.pugx.org/michaeldzjap/twofactor-auth/v/unstable)](//packagist.org/packages/michaeldzjap/twofactor-auth)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=michaeldzjap_laravel-two-factor-authentication&metric=alert_status)](https://sonarcloud.io/dashboard?id=michaeldzjap_laravel-two-factor-authentication)
-[![StyleCI](https://github.styleci.io/repos/92531374/shield?branch=develop)](https://github.styleci.io/repos/92531374?branch=develop)
+[![StyleCI](https://github.styleci.io/repos/92531374/shield?branch=develop)](https://github.styleci.io/repos/92531374?branch=master)
 [![License](https://poser.pugx.org/michaeldzjap/twofactor-auth/license)](https://packagist.org/packages/michaeldzjap/twofactor-auth)
 
 # laravel-two-factor-authentication

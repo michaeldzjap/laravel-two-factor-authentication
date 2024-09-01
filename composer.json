@@ -1,13 +1,20 @@
 {
     "name": "michaeldzjap/twofactor-auth",
-    "description": "A two-factor authentication package for Laravel 5.5 tuned for use with MessageBird Verify",
-    "keywords": ["authentication", "two-factor", "2fa", "messagebird", "laravel"],
+    "description": "A two-factor authentication package for Laravel tuned for use with MessageBird Verify",
+    "keywords": [
+        "authentication",
+        "two-factor",
+        "2fa",
+        "messagebird",
+        "laravel"
+    ],
     "homepage": "https://github.com/michaeldzjap/twofactor-authentication",
     "license": "MIT",
     "type": "package",
     "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
-        "illuminate/support": "^8.0 || ^9.0 || ^10"
+        "illuminate/support": "^8.0 || ^9.0 || ^10.0 || ^11.0"
     },
     "extra": {
         "laravel": {

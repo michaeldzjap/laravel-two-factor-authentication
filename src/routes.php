@@ -4,7 +4,7 @@ $router = app('router');
 
 $router->group([
     'middleware' => ['web', 'guest'],
-    'namespace' => 'App\Http\Controllers\Auth',
+    'namespace' => config('twofactor-auth.routes.namespace', 'App\Http\Controllers\Auth'),
 ], function () use ($router) {
     $router->get(
         config('twofactor-auth.routes.get.url'),

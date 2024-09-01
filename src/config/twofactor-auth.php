@@ -73,6 +73,8 @@ return [
 
     'routes' => [
 
+        'namespace' => 'App\Http\Controllers\Auth',
+
         'get' => [
             'url' => '/auth/token',
             'name' => 'auth.token',

@@ -28,7 +28,7 @@ class VerifySMSToken extends FormRequest
     public function rules()
     {
         return [
-            'token' => 'required|string|numeric',
+            'token' => ['required', 'string', 'regex:/^\d+$/'],
         ];
     }
 }
